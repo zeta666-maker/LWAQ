@@ -1,0 +1,9 @@
+[tc] run F2033_fixed8_s2033
+[tc] F2033_fixed8_s2033: Last 63.22% Avg 82.91% Forg 24.45% size 88.89MB bits [8]
+
+## TC-MoA protocol summary
+
+| Case | seeds | Last-acc mean | min | max | Avg-acc mean | size MB | bits |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| fixed8 | 1 | 63.22% | 63.22% | 63.22% | 82.91% | 88.89 | [8] |
+  fixed8 C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\logs\F2033_fixed8_s2033.txt: per-task [100.0, 100.0, 84.39, 66.93, 63.22]

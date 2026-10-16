@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 680, in <module>
+    main()
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 639, in main
+    model = train_one_task_with_aqcl(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 571, in train_one_task_with_aqcl
+    result = original_train_one_task(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 691, in train_one_task
+    get_prototypes(GVM, taskid, model, mode='adapter', is_return=False)                
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 1749, in get_prototypes
+    kmeans = KMeans(n_clusters=1).fit(F.normalize(_cls_feats, dim=1))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\base.py", line 1336, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\cluster\_kmeans.py", line 1460, in fit
+    X = validate_data(
+        ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 2902, in validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 1074, in check_array
+    _assert_all_finite(
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 133, in _assert_all_finite
+    _assert_all_finite_element_wise(
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\sklearn\utils\validation.py", line 182, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input X contains NaN.
+KMeans does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values

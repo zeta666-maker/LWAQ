@@ -201,9 +201,11 @@ def build_tabular_dataset(
         "num_patches": window_length * 4 // 32,
         "files": {
             split: {
-                "windows": str(data_paths[split]["windows"]),
-                "labels": str(data_paths[split]["labels"]),
-                "index": str(data_paths[split]["index"]),
+                # Store paths relative to the dataset directory so the produced
+                # meta.json is portable across machines (no absolute paths).
+                "windows": data_paths[split]["windows"].name,
+                "labels": data_paths[split]["labels"].name,
+                "index": data_paths[split]["index"].name,
                 "num_samples": len(window_labels[split]),
                 "class_counts": {
                     label: int(window_labels[split].count(label_to_index[label]))
@@ -226,8 +228,16 @@ class TabularPathDataset:
         split_name = "train" if train else "eval"
         split = self.meta["files"][split_name]
         self.split_path = str(self.root_dir)
-        self.windows = np.load(split["windows"], mmap_mode="r")
-        self.labels = np.load(split["labels"], mmap_mode="r")
+        # Resolve stored paths against the dataset directory, supporting both
+        # relative (portable) and absolute (legacy) meta.json entries.
+        windows_path = Path(split["windows"])
+        labels_path = Path(split["labels"])
+        if not windows_path.is_absolute():
+            windows_path = self.root_dir / windows_path
+        if not labels_path.is_absolute():
+            labels_path = self.root_dir / labels_path
+        self.windows = np.load(str(windows_path), mmap_mode="r")
+        self.labels = np.load(str(labels_path), mmap_mode="r")
         self.class_list = list(range(len(self.meta["labels"])))
         self.class_int_str_map = {
             index: name for index, name in enumerate(self.meta["labels"])

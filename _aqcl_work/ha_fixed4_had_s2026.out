@@ -1,0 +1,385 @@
+Namespace(dataset='fault_csv', logs_dir='logs', logs_suffix='ha_fixed4_had_s2026', logger_out_step=50, seed=2026, save_model=False, save_model_name='model_10s', evaluation=False, evaluation_model_name='model_20s', num_tasks=5, shuffle_classes=True, model='vit_base_patch16_224.augreg_in21k', pretrained_type='Sup-21k', head_dim_type='task_classes', logit_type='head_out', logit_scale=4.605170249938965, logit_scale_trainable=False, prompt_len=4, prompt_init='uniform', prompt_start_block=0, prompt_end_block=11, seperate_head=True, use_null_space=True, null_patterns='sh_prompt', null_thres_mode='adaptive', null_thres_value1=0.0, null_thres_value2=0.0, null_eta1=0.999, null_eta2=0.999, null_interm_accum='sum', ln_loss_lam=1.0, refine_head=False, transform_type='autoaug', prob_cutmixup=0, epochs=8, workers=0, eval_workers=0, expand_times=1, temperature=28.0, use_amp=True, sample_type='image', consecutive_training=True, timeout=3000, persistent_workers=False, eval_batch_size=64, lr=0.005, lr_scale=0.2, lr_scale_patterns=['patch_embed'], optimizer='mod_adam', weight_decay=5e-05, lr_sch='multistep', warmup_epochs=0, min_lr=1e-05, decay_milestones=[5, 8], decay_epochs=1000, decay_rate=0.1, show_bar=True, print_model=True, prompt_len_sh=4, prompt_len_sp=4, sh_loss=True, sp_loss=True, ca_loss=True, fa_loss=True, classifier_aggregation_type='mean', contrastive_temperature=0.05, simulation_k=20, simulation_temperature=0.2, task_detector='logit', eval_task_weight=True, eval_tau=2.0, nearest_class_selection=True, prototype_k=20, prototype_temperature=0.1, prototype_confidence_weight=0.0, prototype_ratio=0.1, topk_adapter_selection=False, adapter_k=100, eval_adapter_scale=1.0, eval_adapter_ensemble=False, eval_prototype_router=False, eval_cross_adapter_prototypes=False, eval_trained_task_router=False, eval_local_task_head=True, eval_local_task_head_task_only=False, freeze_shared_prompts_after_first=False, max_logit_score=False, previous_head=True, prototype_classifier=True, copy_weight=False, training_string=('prompt', 'head', 'adapter', 'prototypes'), train_tool='adapter', eval_tool='adapter', device_ids=[0], distributed_data=True, batch_size=32, tabular_window_length=1568, tabular_patch_size=32, tabular_in_chans=4)
+Experiment description: weighted adapter for testing ==>         we use linearly increasing k for k-nearest prototype search
+***** Start AQCL training *****
+############################## Task: [1/5] ##############################
+Current classes (2): [0 1]
+---
+[AQCL] Hadamard-rotated quantization basis enabled on 24/187 layers (scope=attention)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:0.0000
+[AQCL-INSTRUMENT][logits] task=0 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=1.848 fp32_saturated=0.000 amplification=nanx
+Task [1/5] Epoch [1/8]:: loss=2.0963, batch_time=16.368, acc_top1=49.60%
+[AQCL-INSTRUMENT][fisher_warmup] task=0 batches=8 layers=187 nonzero_layers=74 reused_layers=0
+[AQCL] sensitivity source=pre-training: 74/187 layers non-zero from 8 batch(es) (task 0)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 0) [tracking=frozen]
+[AQCL-INSTRUMENT][logits] task=0 epoch=2 quant_enabled=True quant_absmax=9.103 quant_saturated=0.031 fp32_absmax=9.339 fp32_saturated=0.062 amplification=0.97x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.10.mlp.fc1 min=-9.0270 max=0.8847 step=0.660779
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.9.mlp.fc1 min=-5.4781 max=0.2898 step=0.384530
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.8.attn.qkv min=-2.1252 max=1.9470 step=0.271477
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.10.attn.qkv min=-2.3118 max=1.5268 step=0.255910
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.6.attn.qkv min=-1.7101 max=1.7442 step=0.230286
+Task [1/5] Epoch [2/8]:: loss=1.4884, batch_time=30.649, acc_top1=74.28%
+[AQCL-INSTRUMENT][logits] task=0 epoch=3 quant_enabled=True quant_absmax=89.560 quant_saturated=0.875 fp32_absmax=88.292 fp32_saturated=0.812 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=3 blocks.10.mlp.fc1 min=-17.4854 max=9.0109 step=1.766415
+[AQCL-INSTRUMENT][act_range] task=0 epoch=3 blocks.9.mlp.fc1 min=-9.1474 max=6.0388 step=1.012414
+[AQCL-INSTRUMENT][act_range] task=0 epoch=3 blocks.8.mlp.fc1 min=-3.4014 max=3.0629 step=0.430955
+[AQCL-INSTRUMENT][act_range] task=0 epoch=3 blocks.8.attn.qkv min=-2.1797 max=1.9693 step=0.276598
+[AQCL-INSTRUMENT][act_range] task=0 epoch=3 blocks.10.attn.qkv min=-2.3960 max=1.5924 step=0.265892
+Task [1/5] Epoch [3/8]:: loss=1.0294, batch_time=30.667, acc_top1=85.82%
+[AQCL-INSTRUMENT][logits] task=0 epoch=4 quant_enabled=True quant_absmax=108.711 quant_saturated=1.000 fp32_absmax=107.976 fp32_saturated=1.000 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=4 blocks.10.mlp.fc1 min=-16.3767 max=9.6136 step=1.732682
+[AQCL-INSTRUMENT][act_range] task=0 epoch=4 blocks.9.mlp.fc1 min=-10.0570 max=4.0114 step=0.937894
+[AQCL-INSTRUMENT][act_range] task=0 epoch=4 blocks.8.mlp.fc1 min=-4.4288 max=2.1482 step=0.438466
+[AQCL-INSTRUMENT][act_range] task=0 epoch=4 blocks.7.attn.qkv min=-2.2623 max=2.2427 step=0.300335
+[AQCL-INSTRUMENT][act_range] task=0 epoch=4 blocks.11.attn.qkv min=-2.6841 max=1.5356 step=0.281313
+Task [1/5] Epoch [4/8]:: loss=0.7202, batch_time=30.691, acc_top1=88.62%
+[AQCL-INSTRUMENT][logits] task=0 epoch=5 quant_enabled=True quant_absmax=112.165 quant_saturated=1.000 fp32_absmax=112.172 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=5 blocks.10.mlp.fc1 min=-14.6119 max=9.4006 step=1.600832
+[AQCL-INSTRUMENT][act_range] task=0 epoch=5 blocks.9.mlp.fc1 min=-7.6390 max=4.8809 step=0.834657
+[AQCL-INSTRUMENT][act_range] task=0 epoch=5 blocks.8.mlp.fc1 min=-3.1733 max=3.1869 step=0.424015
+[AQCL-INSTRUMENT][act_range] task=0 epoch=5 blocks.7.attn.qkv min=-2.4615 max=2.2928 step=0.316954
+[AQCL-INSTRUMENT][act_range] task=0 epoch=5 blocks.11.attn.qkv min=-2.3847 max=1.8837 step=0.284563
+Task [1/5] Epoch [5/8]:: loss=0.2328, batch_time=30.594, acc_top1=99.60%
+[AQCL-INSTRUMENT][logits] task=0 epoch=6 quant_enabled=True quant_absmax=122.892 quant_saturated=1.000 fp32_absmax=122.898 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=6 blocks.10.mlp.fc1 min=-14.5104 max=11.1598 step=1.711345
+[AQCL-INSTRUMENT][act_range] task=0 epoch=6 blocks.9.mlp.fc1 min=-8.0506 max=4.9606 step=0.867415
+[AQCL-INSTRUMENT][act_range] task=0 epoch=6 blocks.8.mlp.fc1 min=-3.4140 max=3.2227 step=0.442444
+[AQCL-INSTRUMENT][act_range] task=0 epoch=6 blocks.7.attn.qkv min=-2.4473 max=2.3063 step=0.316902
+[AQCL-INSTRUMENT][act_range] task=0 epoch=6 blocks.11.attn.qkv min=-2.2935 max=1.9903 step=0.285586
+Task [1/5] Epoch [6/8]:: loss=0.1796, batch_time=30.698, acc_top1=99.36%
+[AQCL-INSTRUMENT][logits] task=0 epoch=7 quant_enabled=True quant_absmax=119.950 quant_saturated=1.000 fp32_absmax=120.417 fp32_saturated=0.969 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=7 blocks.10.mlp.fc1 min=-15.6415 max=10.8768 step=1.767886
+[AQCL-INSTRUMENT][act_range] task=0 epoch=7 blocks.9.mlp.fc1 min=-8.5180 max=4.9520 step=0.898000
+[AQCL-INSTRUMENT][act_range] task=0 epoch=7 blocks.8.mlp.fc1 min=-3.4263 max=3.2536 step=0.445323
+[AQCL-INSTRUMENT][act_range] task=0 epoch=7 blocks.7.attn.qkv min=-2.3923 max=2.3485 step=0.316053
+[AQCL-INSTRUMENT][act_range] task=0 epoch=7 blocks.11.attn.qkv min=-2.4169 max=2.0817 step=0.299911
+Task [1/5] Epoch [7/8]:: loss=0.1932, batch_time=30.690, acc_top1=98.56%
+[AQCL-INSTRUMENT][logits] task=0 epoch=8 quant_enabled=True quant_absmax=123.139 quant_saturated=1.000 fp32_absmax=123.354 fp32_saturated=0.969 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=8 blocks.10.mlp.fc1 min=-14.8022 max=11.6756 step=1.765192
+[AQCL-INSTRUMENT][act_range] task=0 epoch=8 blocks.9.mlp.fc1 min=-8.7221 max=5.2094 step=0.928767
+[AQCL-INSTRUMENT][act_range] task=0 epoch=8 blocks.8.mlp.fc1 min=-3.4941 max=3.5027 step=0.466451
+[AQCL-INSTRUMENT][act_range] task=0 epoch=8 blocks.7.attn.qkv min=-2.3921 max=2.3740 step=0.317737
+[AQCL-INSTRUMENT][act_range] task=0 epoch=8 blocks.11.attn.qkv min=-2.4493 max=2.0342 step=0.298898
+Task [1/5] Epoch [8/8]:: loss=0.1230, batch_time=30.847, acc_top1=99.68%
+Finish extract class prototypes, mode: shared, total time: 14.6813
+Finish extract class prototypes, mode: adapter, total time: 15.2445
+Task [1/5]:: Training time = 00:04:47
+[AQCL-INSTRUMENT][fisher] task=0 batch=0 loss=0.000000 logits[shape=(32, 2) min=-124.688 max=123.375 mean=-0.025 absmax=124.688] target=[0, 0, 0, 0, 0, 0, 0, 1] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=0 batch=1 loss=0.000000 logits[shape=(32, 2) min=-124.562 max=123.250 mean=-0.257 absmax=124.562] target=[0, 0, 1, 1, 0, 1, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=0 batch=2 loss=0.000000 logits[shape=(32, 2) min=-125.312 max=124.000 mean=-0.521 absmax=125.312] target=[0, 1, 1, 0, 1, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=0 targets=187 grad_None_layers=113 grad_all_zero_layers=62 grad_nonzero_layers=12 alive_layers=74 batch_grad_norms=['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '1.189e-05', '0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj', 'blocks.0.task_adapter.2.down_proj', 'blocks.0.task_adapter.2.up_proj']
+AQCL deployment: size=45.5159MB, GFLOPs=33.7004, GBOPS=269.6031, extra_memory=0.0000MB, weight_bits=[4], activation_bits=[4]
+Task [1/5]:: Eval [1/1]: eval_time=5.5s, acc_class_inc=99.68%
+:: ** Results of task [1]: [ class_inc_last_acc=99.68% | class_inc_avg_acc=99.68% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:05:13 **
+99.68
+############################## Task: [2/5] ##############################
+Current classes (2): [6 8]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:15.1798
+[AQCL-INSTRUMENT][logits] task=1 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=71.437 fp32_saturated=0.875 amplification=nanx
+Task [2/5] Epoch [1/8]:: loss=2.0923, batch_time=12.758, acc_top1=92.31%
+[AQCL-INSTRUMENT][fisher_warmup] task=1 batches=8 layers=187 nonzero_layers=74 reused_layers=24
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 1)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 1) [tracking=frozen]
+[AQCL-INSTRUMENT][logits] task=1 epoch=2 quant_enabled=True quant_absmax=108.147 quant_saturated=0.969 fp32_absmax=106.860 fp32_saturated=0.969 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.10.mlp.fc1 min=-26.0434 max=2.8128 step=1.923741
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.9.mlp.fc1 min=-12.7526 max=-1.6845 step=0.737870
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.8.mlp.fc1 min=-6.2764 max=1.2325 step=0.500590
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.11.attn.qkv min=-3.9488 max=1.0595 step=0.333886
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.11.mlp.fc1 min=-4.2041 max=0.7748 step=0.331926
+Task [2/5] Epoch [2/8]:: loss=0.4258, batch_time=27.247, acc_top1=99.68%
+[AQCL-INSTRUMENT][logits] task=1 epoch=3 quant_enabled=True quant_absmax=129.800 quant_saturated=1.000 fp32_absmax=131.634 fp32_saturated=1.000 amplification=0.99x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=3 blocks.10.mlp.fc1 min=-17.4267 max=1.9982 step=1.294994
+[AQCL-INSTRUMENT][act_range] task=1 epoch=3 blocks.9.mlp.fc1 min=-8.9661 max=-0.0632 step=0.593528
+[AQCL-INSTRUMENT][act_range] task=1 epoch=3 blocks.8.mlp.fc1 min=-3.4984 max=0.8897 step=0.292536
+[AQCL-INSTRUMENT][act_range] task=1 epoch=3 blocks.7.attn.qkv min=-1.8541 max=2.3790 step=0.282206
+[AQCL-INSTRUMENT][act_range] task=1 epoch=3 blocks.8.attn.qkv min=-2.8243 max=1.2234 step=0.269845
+Task [2/5] Epoch [3/8]:: loss=0.1435, batch_time=27.218, acc_top1=99.68%
+[AQCL-INSTRUMENT][logits] task=1 epoch=4 quant_enabled=True quant_absmax=154.829 quant_saturated=1.000 fp32_absmax=154.584 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=4 blocks.10.mlp.fc1 min=-18.3009 max=4.6018 step=1.526844
+[AQCL-INSTRUMENT][act_range] task=1 epoch=4 blocks.9.mlp.fc1 min=-11.2293 max=-0.4424 step=0.719122
+[AQCL-INSTRUMENT][act_range] task=1 epoch=4 blocks.8.mlp.fc1 min=-3.8528 max=0.8453 step=0.313205
+[AQCL-INSTRUMENT][act_range] task=1 epoch=4 blocks.7.attn.qkv min=-2.2356 max=2.3790 step=0.307640
+[AQCL-INSTRUMENT][act_range] task=1 epoch=4 blocks.8.attn.qkv min=-2.8253 max=1.2234 step=0.269914
+Task [2/5] Epoch [4/8]:: loss=0.0708, batch_time=27.382, acc_top1=99.92%
+[AQCL-INSTRUMENT][logits] task=1 epoch=5 quant_enabled=True quant_absmax=164.897 quant_saturated=1.000 fp32_absmax=165.768 fp32_saturated=1.000 amplification=0.99x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=5 blocks.10.mlp.fc1 min=-18.2429 max=4.4325 step=1.511696
+[AQCL-INSTRUMENT][act_range] task=1 epoch=5 blocks.9.mlp.fc1 min=-8.6167 max=0.0841 step=0.580054
+[AQCL-INSTRUMENT][act_range] task=1 epoch=5 blocks.8.mlp.fc1 min=-3.6275 max=0.7743 step=0.293457
+[AQCL-INSTRUMENT][act_range] task=1 epoch=5 blocks.7.attn.qkv min=-1.8656 max=2.3790 step=0.282975
+[AQCL-INSTRUMENT][act_range] task=1 epoch=5 blocks.8.attn.qkv min=-2.8243 max=1.2234 step=0.269846
+Task [2/5] Epoch [5/8]:: loss=0.0495, batch_time=27.274, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=1 epoch=6 quant_enabled=True quant_absmax=166.111 quant_saturated=1.000 fp32_absmax=165.464 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=6 blocks.10.mlp.fc1 min=-18.0276 max=4.0769 step=1.473635
+[AQCL-INSTRUMENT][act_range] task=1 epoch=6 blocks.9.mlp.fc1 min=-8.1345 max=0.1091 step=0.549570
+[AQCL-INSTRUMENT][act_range] task=1 epoch=6 blocks.8.mlp.fc1 min=-3.6128 max=0.5609 step=0.278245
+[AQCL-INSTRUMENT][act_range] task=1 epoch=6 blocks.7.attn.qkv min=-1.7841 max=2.3790 step=0.277541
+[AQCL-INSTRUMENT][act_range] task=1 epoch=6 blocks.8.attn.qkv min=-2.8243 max=1.2234 step=0.269845
+Task [2/5] Epoch [6/8]:: loss=0.0492, batch_time=27.204, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=1 epoch=7 quant_enabled=True quant_absmax=166.656 quant_saturated=1.000 fp32_absmax=165.787 fp32_saturated=1.000 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=7 blocks.10.mlp.fc1 min=-18.3657 max=4.4475 step=1.520884
+[AQCL-INSTRUMENT][act_range] task=1 epoch=7 blocks.9.mlp.fc1 min=-8.3239 max=0.3126 step=0.575768
+[AQCL-INSTRUMENT][act_range] task=1 epoch=7 blocks.8.mlp.fc1 min=-3.6405 max=0.6678 step=0.287225
+[AQCL-INSTRUMENT][act_range] task=1 epoch=7 blocks.7.attn.qkv min=-1.7801 max=2.3790 step=0.277273
+[AQCL-INSTRUMENT][act_range] task=1 epoch=7 blocks.8.attn.qkv min=-2.8243 max=1.2234 step=0.269845
+Task [2/5] Epoch [7/8]:: loss=0.0465, batch_time=27.334, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=1 epoch=8 quant_enabled=True quant_absmax=165.620 quant_saturated=1.000 fp32_absmax=165.486 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=8 blocks.10.mlp.fc1 min=-18.3500 max=4.2088 step=1.503922
+[AQCL-INSTRUMENT][act_range] task=1 epoch=8 blocks.9.mlp.fc1 min=-8.1775 max=-0.0501 step=0.541824
+[AQCL-INSTRUMENT][act_range] task=1 epoch=8 blocks.7.attn.qkv min=-1.7874 max=2.3790 step=0.277763
+[AQCL-INSTRUMENT][act_range] task=1 epoch=8 blocks.8.mlp.fc1 min=-3.5953 max=0.5517 step=0.276464
+[AQCL-INSTRUMENT][act_range] task=1 epoch=8 blocks.8.attn.qkv min=-2.8243 max=1.2234 step=0.269845
+Task [2/5] Epoch [8/8]:: loss=0.0449, batch_time=27.137, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 13.3241
+Finish extract class prototypes, mode: adapter, total time: 15.2006
+Task [2/5]:: Training time = 00:04:33
+[AQCL-INSTRUMENT][fisher] task=1 batch=0 loss=0.000000 logits[shape=(32, 2) min=-169.500 max=169.000 mean=-0.457 absmax=169.500] target=[0, 0, 0, 1, 1, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=1 batch=1 loss=0.000000 logits[shape=(32, 2) min=-166.875 max=166.000 mean=-0.461 absmax=166.875] target=[1, 0, 0, 1, 0, 1, 0, 1] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=1 batch=2 loss=0.000000 logits[shape=(32, 2) min=-164.625 max=164.125 mean=-0.446 absmax=164.625] target=[0, 0, 1, 1, 1, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=1 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=98 batch_grad_norms=['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.2.down_proj', 'blocks.0.task_adapter.2.up_proj']
+AQCL deployment: size=45.5218MB, GFLOPs=33.7004, GBOPS=269.6031, extra_memory=0.0000MB, weight_bits=[4], activation_bits=[4]
+Task [2/5]:: Eval [1/2]: eval_time=5.9s, acc_class_inc=99.68%
+Task [2/5]:: Eval [2/2]: eval_time=5.9s, acc_class_inc=99.68%
+:: ** Results of task [2]: [ class_inc_last_acc=99.68% | class_inc_avg_acc=99.68% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:10:02 **
+99.68
+99.68
+############################## Task: [3/5] ##############################
+Current classes (2): [3 5]
+[AQCL] classifier head re-registered as a quantized target (task 2)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:30.3626
+[AQCL-INSTRUMENT][logits] task=2 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=3.048 fp32_saturated=0.000 amplification=nanx
+Task [3/5] Epoch [1/8]:: loss=3.1232, batch_time=12.696, acc_top1=75.56%
+[AQCL-INSTRUMENT][fisher_warmup] task=2 batches=8 layers=187 nonzero_layers=74 reused_layers=48
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 2)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 2) [tracking=frozen]
+[AQCL-INSTRUMENT][logits] task=2 epoch=2 quant_enabled=True quant_absmax=65.625 quant_saturated=0.938 fp32_absmax=71.488 fp32_saturated=1.000 amplification=0.92x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.10.mlp.fc1 min=-23.2936 max=5.2636 step=1.903815
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.9.mlp.fc1 min=-12.3930 max=2.4515 step=0.989632
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.8.mlp.fc1 min=-5.7022 max=1.8352 step=0.502497
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.11.mlp.fc1 min=-2.3088 max=3.3936 step=0.380159
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.11.attn.qkv min=-2.6411 max=2.6507 step=0.352785
+Task [3/5] Epoch [2/8]:: loss=1.0011, batch_time=27.415, acc_top1=99.68%
+[AQCL-INSTRUMENT][logits] task=2 epoch=3 quant_enabled=True quant_absmax=170.413 quant_saturated=1.000 fp32_absmax=169.147 fp32_saturated=1.000 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=3 blocks.10.mlp.fc1 min=-20.6463 max=10.5045 step=2.076720
+[AQCL-INSTRUMENT][act_range] task=2 epoch=3 blocks.9.mlp.fc1 min=-9.4093 max=5.6781 step=1.005827
+[AQCL-INSTRUMENT][act_range] task=2 epoch=3 blocks.8.mlp.fc1 min=-4.3839 max=2.8596 step=0.482897
+[AQCL-INSTRUMENT][act_range] task=2 epoch=3 blocks.7.attn.qkv min=-2.4344 max=2.3790 step=0.320897
+[AQCL-INSTRUMENT][act_range] task=2 epoch=3 blocks.11.mlp.fc1 min=-2.8362 max=1.9220 step=0.317215
+Task [3/5] Epoch [3/8]:: loss=1.3419, batch_time=27.279, acc_top1=90.79%
+[AQCL-INSTRUMENT][logits] task=2 epoch=4 quant_enabled=True quant_absmax=132.811 quant_saturated=1.000 fp32_absmax=135.114 fp32_saturated=1.000 amplification=0.98x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=4 blocks.10.mlp.fc1 min=-21.6462 max=8.4637 step=2.007329
+[AQCL-INSTRUMENT][act_range] task=2 epoch=4 blocks.9.mlp.fc1 min=-9.0535 max=6.1897 step=1.016218
+[AQCL-INSTRUMENT][act_range] task=2 epoch=4 blocks.8.mlp.fc1 min=-4.3711 max=3.5362 step=0.527155
+[AQCL-INSTRUMENT][act_range] task=2 epoch=4 blocks.7.attn.qkv min=-2.3176 max=2.3790 step=0.313109
+[AQCL-INSTRUMENT][act_range] task=2 epoch=4 blocks.11.attn.qkv min=-3.0623 max=1.6301 step=0.312829
+Task [3/5] Epoch [4/8]:: loss=0.5296, batch_time=27.386, acc_top1=99.92%
+[AQCL-INSTRUMENT][logits] task=2 epoch=5 quant_enabled=True quant_absmax=181.393 quant_saturated=1.000 fp32_absmax=182.506 fp32_saturated=1.000 amplification=0.99x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=5 blocks.10.mlp.fc1 min=-22.7297 max=6.5703 step=1.953333
+[AQCL-INSTRUMENT][act_range] task=2 epoch=5 blocks.9.mlp.fc1 min=-9.3740 max=5.6176 step=0.999440
+[AQCL-INSTRUMENT][act_range] task=2 epoch=5 blocks.8.mlp.fc1 min=-4.3906 max=3.6359 step=0.535104
+[AQCL-INSTRUMENT][act_range] task=2 epoch=5 blocks.11.attn.qkv min=-3.1936 max=1.8065 step=0.333339
+[AQCL-INSTRUMENT][act_range] task=2 epoch=5 blocks.7.attn.qkv min=-2.3286 max=2.3790 step=0.313842
+Task [3/5] Epoch [5/8]:: loss=0.4442, batch_time=27.237, acc_top1=99.92%
+[AQCL-INSTRUMENT][logits] task=2 epoch=6 quant_enabled=True quant_absmax=198.338 quant_saturated=1.000 fp32_absmax=193.861 fp32_saturated=1.000 amplification=1.02x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=6 blocks.10.mlp.fc1 min=-23.0851 max=6.5599 step=1.976331
+[AQCL-INSTRUMENT][act_range] task=2 epoch=6 blocks.9.mlp.fc1 min=-8.8453 max=5.5829 step=0.961876
+[AQCL-INSTRUMENT][act_range] task=2 epoch=6 blocks.8.mlp.fc1 min=-4.2470 max=3.6663 step=0.527552
+[AQCL-INSTRUMENT][act_range] task=2 epoch=6 blocks.11.attn.qkv min=-3.2810 max=1.8731 step=0.343608
+[AQCL-INSTRUMENT][act_range] task=2 epoch=6 blocks.7.attn.qkv min=-2.3065 max=2.3790 step=0.312370
+Task [3/5] Epoch [6/8]:: loss=0.4552, batch_time=27.305, acc_top1=99.92%
+[AQCL-INSTRUMENT][logits] task=2 epoch=7 quant_enabled=True quant_absmax=201.692 quant_saturated=1.000 fp32_absmax=192.077 fp32_saturated=1.000 amplification=1.05x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=7 blocks.10.mlp.fc1 min=-23.5523 max=6.3513 step=1.993574
+[AQCL-INSTRUMENT][act_range] task=2 epoch=7 blocks.9.mlp.fc1 min=-9.0708 max=5.5913 step=0.977476
+[AQCL-INSTRUMENT][act_range] task=2 epoch=7 blocks.8.mlp.fc1 min=-4.3649 max=3.5942 step=0.530605
+[AQCL-INSTRUMENT][act_range] task=2 epoch=7 blocks.11.attn.qkv min=-3.3379 max=1.8803 step=0.347880
+[AQCL-INSTRUMENT][act_range] task=2 epoch=7 blocks.7.attn.qkv min=-2.3390 max=2.3790 step=0.314537
+Task [3/5] Epoch [7/8]:: loss=0.4340, batch_time=27.315, acc_top1=99.92%
+[AQCL-INSTRUMENT][logits] task=2 epoch=8 quant_enabled=True quant_absmax=198.870 quant_saturated=1.000 fp32_absmax=195.852 fp32_saturated=1.000 amplification=1.02x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=8 blocks.10.mlp.fc1 min=-23.2296 max=6.6320 step=1.990777
+[AQCL-INSTRUMENT][act_range] task=2 epoch=8 blocks.9.mlp.fc1 min=-9.3582 max=5.8149 step=1.011540
+[AQCL-INSTRUMENT][act_range] task=2 epoch=8 blocks.8.mlp.fc1 min=-4.4569 max=3.7200 step=0.545127
+[AQCL-INSTRUMENT][act_range] task=2 epoch=8 blocks.11.attn.qkv min=-3.2543 max=1.9236 step=0.345189
+[AQCL-INSTRUMENT][act_range] task=2 epoch=8 blocks.11.mlp.fc1 min=-2.8746 max=1.8989 step=0.318234
+Task [3/5] Epoch [8/8]:: loss=0.4312, batch_time=27.300, acc_top1=99.92%
+Finish extract class prototypes, mode: shared, total time: 13.3139
+Finish extract class prototypes, mode: adapter, total time: 15.2037
+Task [3/5]:: Training time = 00:04:48
+[AQCL-INSTRUMENT][fisher] task=2 batch=0 loss=0.000000 logits[shape=(32, 2) min=-197.750 max=199.875 mean=0.645 absmax=199.875] target=[0, 0, 1, 0, 1, 1, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=2 batch=1 loss=0.000000 logits[shape=(32, 2) min=-198.750 max=201.750 mean=0.542 absmax=201.750] target=[0, 0, 0, 0, 1, 0, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=2 batch=2 loss=0.000000 logits[shape=(32, 2) min=-195.000 max=198.375 mean=0.621 absmax=198.375] target=[0, 1, 1, 0, 1, 0, 0, 1] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=2 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=122 batch_grad_norms=['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=45.5276MB, GFLOPs=33.7004, GBOPS=269.6031, extra_memory=0.0000MB, weight_bits=[4], activation_bits=[4]
+Task [3/5]:: Eval [1/3]: eval_time=6.4s, acc_class_inc=99.68%
+Task [3/5]:: Eval [2/3]: eval_time=6.4s, acc_class_inc=95.25%
+Task [3/5]:: Eval [3/3]: eval_time=6.4s, acc_class_inc=68.35%
+:: ** Results of task [3]: [ class_inc_last_acc=87.76% | class_inc_avg_acc=95.71% | class_inc_last_forg= 2.22% ] **
+:: ** Time so far: 00:15:14 **
+99.68
+99.68
+87.76
+############################## Task: [4/5] ##############################
+Current classes (2): [2 7]
+[AQCL] classifier head re-registered as a quantized target (task 3)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:45.3802
+[AQCL-INSTRUMENT][logits] task=3 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=3.725 fp32_saturated=0.000 amplification=nanx
+Task [4/5] Epoch [1/8]:: loss=2.1908, batch_time=12.982, acc_top1=93.43%
+[AQCL-INSTRUMENT][fisher_warmup] task=3 batches=8 layers=187 nonzero_layers=74 reused_layers=72
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 3)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 3) [tracking=frozen]
+[AQCL-INSTRUMENT][logits] task=3 epoch=2 quant_enabled=True quant_absmax=106.667 quant_saturated=1.000 fp32_absmax=101.767 fp32_saturated=1.000 amplification=1.05x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.10.mlp.fc1 min=-17.7568 max=19.3801 step=2.475797
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.9.mlp.fc1 min=-6.4391 max=9.1634 step=1.040166
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.11.mlp.fc1 min=-3.4448 max=2.2070 step=0.376785
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.11.attn.qkv min=-3.1915 max=2.2518 step=0.362886
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.8.mlp.fc1 min=-3.7546 max=1.2860 step=0.336035
+Task [4/5] Epoch [2/8]:: loss=1.0150, batch_time=27.523, acc_top1=99.76%
+[AQCL-INSTRUMENT][logits] task=3 epoch=3 quant_enabled=True quant_absmax=136.676 quant_saturated=1.000 fp32_absmax=134.645 fp32_saturated=1.000 amplification=1.02x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=3 blocks.10.mlp.fc1 min=-12.8820 max=8.5440 step=1.428394
+[AQCL-INSTRUMENT][act_range] task=3 epoch=3 blocks.9.mlp.fc1 min=-6.1466 max=3.6751 step=0.654781
+[AQCL-INSTRUMENT][act_range] task=3 epoch=3 blocks.11.mlp.fc1 min=-2.5086 max=2.3368 step=0.323025
+[AQCL-INSTRUMENT][act_range] task=3 epoch=3 blocks.11.attn.qkv min=-2.6274 max=2.0740 step=0.313428
+[AQCL-INSTRUMENT][act_range] task=3 epoch=3 blocks.7.attn.qkv min=-2.0740 max=2.3790 step=0.296867
+Task [4/5] Epoch [3/8]:: loss=0.5877, batch_time=27.645, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=3 epoch=4 quant_enabled=True quant_absmax=151.614 quant_saturated=1.000 fp32_absmax=149.069 fp32_saturated=1.000 amplification=1.02x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=4 blocks.10.mlp.fc1 min=-15.2813 max=8.3462 step=1.575171
+[AQCL-INSTRUMENT][act_range] task=3 epoch=4 blocks.9.mlp.fc1 min=-6.2606 max=3.4505 step=0.647402
+[AQCL-INSTRUMENT][act_range] task=3 epoch=4 blocks.11.mlp.fc1 min=-2.6572 max=2.3451 step=0.333491
+[AQCL-INSTRUMENT][act_range] task=3 epoch=4 blocks.11.attn.qkv min=-2.7103 max=2.0831 step=0.319558
+[AQCL-INSTRUMENT][act_range] task=3 epoch=4 blocks.7.attn.qkv min=-2.0509 max=2.3790 step=0.295327
+Task [4/5] Epoch [4/8]:: loss=0.4830, batch_time=27.623, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=3 epoch=5 quant_enabled=True quant_absmax=156.749 quant_saturated=1.000 fp32_absmax=157.113 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=5 blocks.10.mlp.fc1 min=-15.8915 max=9.3238 step=1.681017
+[AQCL-INSTRUMENT][act_range] task=3 epoch=5 blocks.9.mlp.fc1 min=-6.3752 max=4.2588 step=0.708928
+[AQCL-INSTRUMENT][act_range] task=3 epoch=5 blocks.11.mlp.fc1 min=-2.6563 max=2.4013 step=0.337173
+[AQCL-INSTRUMENT][act_range] task=3 epoch=5 blocks.11.attn.qkv min=-2.7284 max=2.2065 step=0.328995
+[AQCL-INSTRUMENT][act_range] task=3 epoch=5 blocks.7.attn.qkv min=-2.0406 max=2.3790 step=0.294643
+Task [4/5] Epoch [5/8]:: loss=0.4294, batch_time=27.575, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=3 epoch=6 quant_enabled=True quant_absmax=161.532 quant_saturated=1.000 fp32_absmax=161.562 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=6 blocks.10.mlp.fc1 min=-15.5112 max=9.6233 step=1.675630
+[AQCL-INSTRUMENT][act_range] task=3 epoch=6 blocks.9.mlp.fc1 min=-6.2481 max=4.1140 step=0.690810
+[AQCL-INSTRUMENT][act_range] task=3 epoch=6 blocks.11.mlp.fc1 min=-2.6077 max=2.3189 step=0.328445
+[AQCL-INSTRUMENT][act_range] task=3 epoch=6 blocks.11.attn.qkv min=-2.7495 max=2.1534 step=0.326865
+[AQCL-INSTRUMENT][act_range] task=3 epoch=6 blocks.7.attn.qkv min=-2.0219 max=2.3790 step=0.293396
+Task [4/5] Epoch [6/8]:: loss=0.4172, batch_time=27.560, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=3 epoch=7 quant_enabled=True quant_absmax=165.826 quant_saturated=1.000 fp32_absmax=164.153 fp32_saturated=1.000 amplification=1.01x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=7 blocks.10.mlp.fc1 min=-15.7896 max=8.7298 step=1.634627
+[AQCL-INSTRUMENT][act_range] task=3 epoch=7 blocks.9.mlp.fc1 min=-6.3830 max=3.8457 step=0.681913
+[AQCL-INSTRUMENT][act_range] task=3 epoch=7 blocks.11.mlp.fc1 min=-2.6509 max=2.3262 step=0.331807
+[AQCL-INSTRUMENT][act_range] task=3 epoch=7 blocks.11.attn.qkv min=-2.7361 max=2.0893 step=0.321690
+[AQCL-INSTRUMENT][act_range] task=3 epoch=7 blocks.7.attn.qkv min=-2.0274 max=2.3790 step=0.293762
+Task [4/5] Epoch [7/8]:: loss=0.4113, batch_time=27.485, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=3 epoch=8 quant_enabled=True quant_absmax=165.398 quant_saturated=1.000 fp32_absmax=162.902 fp32_saturated=1.000 amplification=1.02x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=8 blocks.10.mlp.fc1 min=-15.5227 max=9.0269 step=1.636642
+[AQCL-INSTRUMENT][act_range] task=3 epoch=8 blocks.9.mlp.fc1 min=-6.2833 max=3.9611 step=0.682961
+[AQCL-INSTRUMENT][act_range] task=3 epoch=8 blocks.11.mlp.fc1 min=-2.6219 max=2.3758 step=0.333174
+[AQCL-INSTRUMENT][act_range] task=3 epoch=8 blocks.11.attn.qkv min=-2.7342 max=2.1361 step=0.324686
+[AQCL-INSTRUMENT][act_range] task=3 epoch=8 blocks.7.attn.qkv min=-2.0191 max=2.3790 step=0.293208
+Task [4/5] Epoch [8/8]:: loss=0.4168, batch_time=27.550, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 13.3546
+Finish extract class prototypes, mode: adapter, total time: 15.2921
+Task [4/5]:: Training time = 00:05:06
+[AQCL-INSTRUMENT][fisher] task=3 batch=0 loss=0.000000 logits[shape=(32, 2) min=-174.625 max=169.875 mean=-1.646 absmax=174.625] target=[0, 0, 0, 0, 0, 0, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=3 batch=1 loss=0.000000 logits[shape=(32, 2) min=-163.875 max=158.500 mean=-1.798 absmax=163.875] target=[1, 0, 0, 1, 0, 0, 0, 1] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=3 batch=2 loss=0.000000 logits[shape=(32, 2) min=-177.500 max=171.750 mean=-1.809 absmax=177.500] target=[1, 1, 0, 0, 0, 0, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=3 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=146 batch_grad_norms=['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=45.5335MB, GFLOPs=33.7004, GBOPS=269.6031, extra_memory=0.0000MB, weight_bits=[4], activation_bits=[4]
+Task [4/5]:: Eval [1/4]: eval_time=6.8s, acc_class_inc=99.37%
+Task [4/5]:: Eval [2/4]: eval_time=6.8s, acc_class_inc=57.59%
+Task [4/5]:: Eval [3/4]: eval_time=6.8s, acc_class_inc=24.68%
+Task [4/5]:: Eval [4/4]: eval_time=6.9s, acc_class_inc=49.68%
+:: ** Results of task [4]: [ class_inc_last_acc=57.83% | class_inc_avg_acc=86.24% | class_inc_last_forg=28.69% ] **
+:: ** Time so far: 00:20:52 **
+99.68
+99.68
+87.76
+57.83
+############################## Task: [5/5] ##############################
+Current classes (1): [4]
+[AQCL] classifier head re-registered as a quantized target (task 4)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:30.4766
+[AQCL-INSTRUMENT][logits] task=4 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=3.719 fp32_saturated=1.000 amplification=nanx
+Task [5/5] Epoch [1/8]:: loss=1.4066, batch_time=6.625, acc_top1=100.00%
+[AQCL-INSTRUMENT][fisher_warmup] task=4 batches=8 layers=187 nonzero_layers=0 reused_layers=146
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 8 batch(es) (task 4)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 4) [tracking=frozen]
+[AQCL-INSTRUMENT][logits] task=4 epoch=2 quant_enabled=True quant_absmax=0.330 quant_saturated=1.000 fp32_absmax=0.170 fp32_saturated=1.000 amplification=1.94x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.10.mlp.fc1 min=-17.7023 max=7.4595 step=1.677455
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.9.mlp.fc1 min=-8.5143 max=4.5069 step=0.868078
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.8.mlp.fc1 min=-3.2629 max=2.1768 step=0.362642
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.7.attn.qkv min=-2.4657 max=2.3790 step=0.322985
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.11.attn.qkv min=-2.8186 max=1.2958 step=0.274297
+Task [5/5] Epoch [2/8]:: loss=1.3109, batch_time=13.910, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=3 quant_enabled=True quant_absmax=0.179 quant_saturated=1.000 fp32_absmax=0.163 fp32_saturated=1.000 amplification=1.10x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=3 blocks.10.mlp.fc1 min=-18.9232 max=5.4601 step=1.625550
+[AQCL-INSTRUMENT][act_range] task=4 epoch=3 blocks.9.mlp.fc1 min=-8.7013 max=4.2287 step=0.861999
+[AQCL-INSTRUMENT][act_range] task=4 epoch=3 blocks.8.mlp.fc1 min=-3.5337 max=2.0412 step=0.371659
+[AQCL-INSTRUMENT][act_range] task=4 epoch=3 blocks.7.attn.qkv min=-2.5234 max=2.3790 step=0.326828
+[AQCL-INSTRUMENT][act_range] task=4 epoch=3 blocks.11.attn.qkv min=-3.0731 max=1.1673 step=0.282696
+Task [5/5] Epoch [3/8]:: loss=0.9760, batch_time=13.981, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=4 quant_enabled=True quant_absmax=0.088 quant_saturated=1.000 fp32_absmax=0.067 fp32_saturated=1.000 amplification=1.32x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=4 blocks.10.mlp.fc1 min=-19.0755 max=6.5509 step=1.708428
+[AQCL-INSTRUMENT][act_range] task=4 epoch=4 blocks.9.mlp.fc1 min=-8.5357 max=4.6524 step=0.879209
+[AQCL-INSTRUMENT][act_range] task=4 epoch=4 blocks.8.mlp.fc1 min=-3.5322 max=2.1371 step=0.377950
+[AQCL-INSTRUMENT][act_range] task=4 epoch=4 blocks.7.attn.qkv min=-2.5148 max=2.3790 step=0.326254
+[AQCL-INSTRUMENT][act_range] task=4 epoch=4 blocks.11.attn.qkv min=-3.1240 max=1.1426 step=0.284441
+Task [5/5] Epoch [4/8]:: loss=0.8584, batch_time=13.926, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=5 quant_enabled=True quant_absmax=0.022 quant_saturated=1.000 fp32_absmax=0.015 fp32_saturated=1.000 amplification=1.46x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=5 blocks.10.mlp.fc1 min=-19.2020 max=6.6669 step=1.724593
+[AQCL-INSTRUMENT][act_range] task=4 epoch=5 blocks.9.mlp.fc1 min=-8.7249 max=4.2476 step=0.864829
+[AQCL-INSTRUMENT][act_range] task=4 epoch=5 blocks.8.mlp.fc1 min=-3.5811 max=2.1650 step=0.383068
+[AQCL-INSTRUMENT][act_range] task=4 epoch=5 blocks.7.attn.qkv min=-2.5083 max=2.3790 step=0.325822
+[AQCL-INSTRUMENT][act_range] task=4 epoch=5 blocks.11.attn.qkv min=-3.0832 max=1.1695 step=0.283511
+Task [5/5] Epoch [5/8]:: loss=0.7696, batch_time=13.960, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=6 quant_enabled=True quant_absmax=0.004 quant_saturated=1.000 fp32_absmax=0.003 fp32_saturated=1.000 amplification=1.32x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=6 blocks.10.mlp.fc1 min=-18.9532 max=6.9726 step=1.728386
+[AQCL-INSTRUMENT][act_range] task=4 epoch=6 blocks.9.mlp.fc1 min=-8.5520 max=4.6613 step=0.880883
+[AQCL-INSTRUMENT][act_range] task=4 epoch=6 blocks.8.mlp.fc1 min=-3.5350 max=2.2522 step=0.385812
+[AQCL-INSTRUMENT][act_range] task=4 epoch=6 blocks.7.attn.qkv min=-2.5215 max=2.3790 step=0.326705
+[AQCL-INSTRUMENT][act_range] task=4 epoch=6 blocks.11.attn.qkv min=-3.0602 max=1.1746 step=0.282321
+Task [5/5] Epoch [6/8]:: loss=0.7789, batch_time=13.891, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=7 quant_enabled=True quant_absmax=0.003 quant_saturated=1.000 fp32_absmax=0.003 fp32_saturated=1.000 amplification=1.20x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=7 blocks.10.mlp.fc1 min=-19.1692 max=7.4188 step=1.772536
+[AQCL-INSTRUMENT][act_range] task=4 epoch=7 blocks.9.mlp.fc1 min=-8.9320 max=4.7077 step=0.909312
+[AQCL-INSTRUMENT][act_range] task=4 epoch=7 blocks.8.mlp.fc1 min=-3.5815 max=2.2350 step=0.387765
+[AQCL-INSTRUMENT][act_range] task=4 epoch=7 blocks.7.attn.qkv min=-2.5193 max=2.3790 step=0.326556
+[AQCL-INSTRUMENT][act_range] task=4 epoch=7 blocks.11.attn.qkv min=-2.9527 max=1.2299 step=0.278839
+Task [5/5] Epoch [7/8]:: loss=0.7546, batch_time=13.980, acc_top1=100.00%
+[AQCL-INSTRUMENT][logits] task=4 epoch=8 quant_enabled=True quant_absmax=0.001 quant_saturated=1.000 fp32_absmax=0.001 fp32_saturated=1.000 amplification=1.17x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=8 blocks.10.mlp.fc1 min=-19.0229 max=6.2694 step=1.686155
+[AQCL-INSTRUMENT][act_range] task=4 epoch=8 blocks.9.mlp.fc1 min=-8.7384 max=4.2682 step=0.867108
+[AQCL-INSTRUMENT][act_range] task=4 epoch=8 blocks.8.mlp.fc1 min=-3.6825 max=2.0624 step=0.382995
+[AQCL-INSTRUMENT][act_range] task=4 epoch=8 blocks.7.attn.qkv min=-2.4969 max=2.3790 step=0.325064
+[AQCL-INSTRUMENT][act_range] task=4 epoch=8 blocks.11.attn.qkv min=-3.0082 max=1.1321 step=0.276024
+Task [5/5] Epoch [8/8]:: loss=0.7695, batch_time=14.034, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 6.7008
+Finish extract class prototypes, mode: adapter, total time: 7.6389
+Task [5/5]:: Training time = 00:02:37
+[AQCL-INSTRUMENT][fisher] task=4 batch=0 loss=0.000000 logits[shape=(32, 1) min=-0.000 max=0.000 mean=0.000 absmax=0.000] target=[0, 0, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=4 batch=1 loss=0.000000 logits[shape=(32, 1) min=-0.000 max=0.001 mean=0.000 absmax=0.001] target=[0, 0, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=4 batch=2 loss=0.000000 logits[shape=(32, 1) min=-0.000 max=0.001 mean=0.000 absmax=0.001] target=[0, 0, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=4 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=146 batch_grad_norms=['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=45.5390MB, GFLOPs=33.7004, GBOPS=269.6031, extra_memory=0.0000MB, weight_bits=[4], activation_bits=[4]
+Task [5/5]:: Eval [1/5]: eval_time=7.3s, acc_class_inc=99.68%
+Task [5/5]:: Eval [2/5]: eval_time=7.3s, acc_class_inc=90.51%
+Task [5/5]:: Eval [3/5]: eval_time=7.4s, acc_class_inc=20.25%
+Task [5/5]:: Eval [4/5]: eval_time=7.4s, acc_class_inc=35.13%
+Task [5/5]:: Eval [5/5]: eval_time=3.8s, acc_class_inc=98.73%
+:: ** Results of task [5]: [ class_inc_last_acc=65.54% | class_inc_avg_acc=82.10% | class_inc_last_forg=17.96% ] **
+:: ** Time so far: 00:24:07 **
+99.68
+99.68
+87.76
+57.83
+65.54
+[AQCL-INSTRUMENT] wrote logs\ha_fixed4_had_s2026.instrument.json (15 records)
+[AQCL-INSTRUMENT] wrote logs\ha_fixed4_had_s2026.instrument.json (15 records)

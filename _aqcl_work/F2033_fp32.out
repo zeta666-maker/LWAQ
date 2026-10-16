@@ -1,0 +1,9 @@
+[tc] run F2033_fp32_s2033
+[tc] F2033_fp32_s2033: Last 73.00% Avg 88.23% Forg 17.88% size nanMB bits -
+
+## TC-MoA protocol summary
+
+| Case | seeds | Last-acc mean | min | max | Avg-acc mean | size MB | bits |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| fp32 | 1 | 73.00% | 73.00% | 73.00% | 88.23% | nan | - |
+  fp32 C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\logs\F2033_fp32_s2033.txt: per-task [100.0, 100.0, 88.82, 79.35, 73.0]

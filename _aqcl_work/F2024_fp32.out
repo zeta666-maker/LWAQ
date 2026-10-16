@@ -1,0 +1,9 @@
+[tc] run F2024_fp32_s2024
+[tc] F2024_fp32_s2024: Last 84.88% Avg 93.43% Forg 14.24% size nanMB bits -
+
+## TC-MoA protocol summary
+
+| Case | seeds | Last-acc mean | min | max | Avg-acc mean | size MB | bits |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| fp32 | 1 | 84.88% | 84.88% | 84.88% | 93.43% | nan | - |
+  fp32 C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\logs\F2024_fp32_s2024.txt: per-task [100.0, 99.84, 94.62, 87.82, 84.88]

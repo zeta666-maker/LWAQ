@@ -1,0 +1,139 @@
+Namespace(dataset='fault_csv', logs_dir='logs', logs_suffix='p9_fp32', logger_out_step=50, seed=2024, save_model=False, save_model_name='model_10s', evaluation=False, evaluation_model_name='model_20s', num_tasks=5, shuffle_classes=True, model='vit_base_patch16_224.augreg_in21k', pretrained_type='Sup-21k', head_dim_type='task_classes', logit_type='head_out', logit_scale=4.605170249938965, logit_scale_trainable=False, prompt_len=4, prompt_init='uniform', prompt_start_block=0, prompt_end_block=11, seperate_head=True, use_null_space=True, null_patterns='sh_prompt', null_thres_mode='adaptive', null_thres_value1=0.0, null_thres_value2=0.0, null_eta1=0.999, null_eta2=0.999, null_interm_accum='sum', ln_loss_lam=1.0, refine_head=False, transform_type='autoaug', prob_cutmixup=0, epochs=8, workers=0, eval_workers=0, expand_times=1, temperature=28.0, use_amp=True, sample_type='image', consecutive_training=True, timeout=3000, persistent_workers=False, eval_batch_size=64, lr=0.005, lr_scale=0.2, lr_scale_patterns=['patch_embed'], optimizer='mod_adam', weight_decay=5e-05, lr_sch='multistep', warmup_epochs=0, min_lr=1e-05, decay_milestones=[5, 8], decay_epochs=1000, decay_rate=0.1, show_bar=True, print_model=True, prompt_len_sh=4, prompt_len_sp=4, sh_loss=True, sp_loss=True, ca_loss=True, fa_loss=True, classifier_aggregation_type='mean', contrastive_temperature=0.05, simulation_k=20, simulation_temperature=0.2, task_detector='logit', eval_task_weight=False, eval_tau=2.0, nearest_class_selection=True, prototype_k=20, prototype_temperature=0.1, prototype_confidence_weight=0.0, prototype_ratio=0.1, topk_adapter_selection=False, adapter_k=100, eval_adapter_scale=1.0, eval_adapter_ensemble=False, eval_prototype_router=False, eval_cross_adapter_prototypes=False, eval_trained_task_router=True, eval_local_task_head=True, eval_local_task_head_task_only=False, freeze_shared_prompts_after_first=False, max_logit_score=False, previous_head=True, prototype_classifier=True, copy_weight=False, training_string=('prompt', 'head', 'adapter', 'prototypes'), train_tool='adapter', eval_tool='adapter', device_ids=[0], distributed_data=True, batch_size=32, tabular_window_length=1568, tabular_patch_size=32, tabular_in_chans=4)
+Experiment description: weighted adapter for testing ==>         we use linearly increasing k for k-nearest prototype search
+***** Start AQCL training *****
+############################## Task: [1/5] ##############################
+Current classes (2): [2 5]
+---
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:0.0000
+Task [1/5] Epoch [1/8]:: loss=1.7032, batch_time=15.299, acc_top1=62.10%
+Task [1/5] Epoch [2/8]:: loss=0.3540, batch_time=14.647, acc_top1=95.99%
+Task [1/5] Epoch [3/8]:: loss=0.0381, batch_time=14.866, acc_top1=99.68%
+Task [1/5] Epoch [4/8]:: loss=0.1347, batch_time=14.907, acc_top1=98.00%
+Task [1/5] Epoch [5/8]:: loss=0.0143, batch_time=15.001, acc_top1=99.84%
+Task [1/5] Epoch [6/8]:: loss=0.0104, batch_time=15.024, acc_top1=99.92%
+Task [1/5] Epoch [7/8]:: loss=0.0043, batch_time=15.092, acc_top1=100.00%
+Task [1/5] Epoch [8/8]:: loss=0.0045, batch_time=15.225, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 6.6624
+Finish extract class prototypes, mode: adapter, total time: 5.5205
+Task [1/5]:: Training time = 00:02:22
+Task router training accuracy: 100.00%
+Task [1/5]:: Router-Eval[1]: 100.00%
+Task [1/5]:: Eval [1/1]: eval_time=2.0s, acc_class_inc=100.00%
+:: ** Results of task [1]: [ class_inc_last_acc=100.00% | class_inc_avg_acc=100.00% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:02:32 **
+100.00
+############################## Task: [2/5] ##############################
+Current classes (2): [3 0]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:5.4620
+Task [2/5] Epoch [1/8]:: loss=1.5404, batch_time=11.466, acc_top1=92.71%
+Task [2/5] Epoch [2/8]:: loss=0.7016, batch_time=11.365, acc_top1=98.88%
+Task [2/5] Epoch [3/8]:: loss=0.0930, batch_time=11.380, acc_top1=100.00%
+Task [2/5] Epoch [4/8]:: loss=0.0588, batch_time=11.445, acc_top1=100.00%
+Task [2/5] Epoch [5/8]:: loss=0.0496, batch_time=11.428, acc_top1=100.00%
+Task [2/5] Epoch [6/8]:: loss=0.0473, batch_time=11.416, acc_top1=100.00%
+Task [2/5] Epoch [7/8]:: loss=0.0453, batch_time=11.439, acc_top1=100.00%
+Task [2/5] Epoch [8/8]:: loss=0.0451, batch_time=11.388, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.2817
+Finish extract class prototypes, mode: adapter, total time: 5.5485
+Task [2/5]:: Training time = 00:01:58
+Task router training accuracy: 100.00%
+Task [2/5]:: Router-Eval[1]: 100.00%
+Task [2/5]:: Eval [1/2]: eval_time=3.1s, acc_class_inc=100.00%
+Task [2/5]:: Router-Eval[2]: 99.68%
+Task [2/5]:: Eval [2/2]: eval_time=3.1s, acc_class_inc=99.68%
+:: ** Results of task [2]: [ class_inc_last_acc=99.84% | class_inc_avg_acc=99.92% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:04:52 **
+100.00
+99.84
+############################## Task: [3/5] ##############################
+Current classes (2): [7 4]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:10.9631
+Task [3/5] Epoch [1/8]:: loss=0.9360, batch_time=11.345, acc_top1=97.28%
+Task [3/5] Epoch [2/8]:: loss=1.7877, batch_time=11.368, acc_top1=95.91%
+Task [3/5] Epoch [3/8]:: loss=0.1886, batch_time=11.412, acc_top1=99.84%
+Task [3/5] Epoch [4/8]:: loss=0.1184, batch_time=11.382, acc_top1=100.00%
+Task [3/5] Epoch [5/8]:: loss=0.1053, batch_time=11.336, acc_top1=100.00%
+Task [3/5] Epoch [6/8]:: loss=0.0980, batch_time=11.392, acc_top1=100.00%
+Task [3/5] Epoch [7/8]:: loss=0.0969, batch_time=11.363, acc_top1=100.00%
+Task [3/5] Epoch [8/8]:: loss=0.0882, batch_time=11.371, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.2784
+Finish extract class prototypes, mode: adapter, total time: 5.5320
+Task [3/5]:: Training time = 00:02:03
+Task router training accuracy: 100.00%
+Task [3/5]:: Router-Eval[1]: 100.00%
+Task [3/5]:: Eval [1/3]: eval_time=4.3s, acc_class_inc=100.00%
+Task [3/5]:: Router-Eval[2]: 98.73%
+Task [3/5]:: Eval [2/3]: eval_time=4.3s, acc_class_inc=98.73%
+Task [3/5]:: Router-Eval[3]: 93.35%
+Task [3/5]:: Eval [3/3]: eval_time=4.3s, acc_class_inc=93.35%
+:: ** Results of task [3]: [ class_inc_last_acc=97.36% | class_inc_avg_acc=99.07% | class_inc_last_forg= 0.47% ] **
+:: ** Time so far: 00:07:46 **
+100.00
+99.84
+97.36
+############################## Task: [4/5] ##############################
+Current classes (2): [1 6]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:16.4575
+Task [4/5] Epoch [1/8]:: loss=1.1369, batch_time=11.585, acc_top1=98.32%
+Task [4/5] Epoch [2/8]:: loss=0.4667, batch_time=11.618, acc_top1=100.00%
+Task [4/5] Epoch [3/8]:: loss=0.3696, batch_time=11.598, acc_top1=100.00%
+Task [4/5] Epoch [4/8]:: loss=0.3287, batch_time=11.616, acc_top1=100.00%
+Task [4/5] Epoch [5/8]:: loss=0.3043, batch_time=11.625, acc_top1=100.00%
+Task [4/5] Epoch [6/8]:: loss=0.2987, batch_time=11.711, acc_top1=100.00%
+Task [4/5] Epoch [7/8]:: loss=0.2873, batch_time=11.661, acc_top1=100.00%
+Task [4/5] Epoch [8/8]:: loss=0.2913, batch_time=11.579, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.2478
+Finish extract class prototypes, mode: adapter, total time: 5.5687
+Task [4/5]:: Training time = 00:02:11
+Task router training accuracy: 100.00%
+Task [4/5]:: Router-Eval[1]: 95.57%
+Task [4/5]:: Eval [1/4]: eval_time=5.8s, acc_class_inc=95.57%
+Task [4/5]:: Router-Eval[2]: 99.37%
+Task [4/5]:: Eval [2/4]: eval_time=5.5s, acc_class_inc=99.37%
+Task [4/5]:: Router-Eval[3]: 93.67%
+Task [4/5]:: Eval [3/4]: eval_time=5.6s, acc_class_inc=93.67%
+Task [4/5]:: Router-Eval[4]: 96.84%
+Task [4/5]:: Eval [4/4]: eval_time=5.6s, acc_class_inc=96.84%
+:: ** Results of task [4]: [ class_inc_last_acc=96.36% | class_inc_avg_acc=98.39% | class_inc_last_forg= 1.58% ] **
+:: ** Time so far: 00:11:31 **
+100.00
+99.84
+97.36
+96.36
+############################## Task: [5/5] ##############################
+Current classes (1): [8]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:10.9831
+Task [5/5] Epoch [1/8]:: loss=1.1624, batch_time=5.897, acc_top1=100.00%
+Task [5/5] Epoch [2/8]:: loss=0.5476, batch_time=5.852, acc_top1=100.00%
+Task [5/5] Epoch [3/8]:: loss=0.4237, batch_time=5.859, acc_top1=100.00%
+Task [5/5] Epoch [4/8]:: loss=0.3779, batch_time=5.867, acc_top1=100.00%
+Task [5/5] Epoch [5/8]:: loss=0.3537, batch_time=5.866, acc_top1=100.00%
+Task [5/5] Epoch [6/8]:: loss=0.3461, batch_time=5.863, acc_top1=100.00%
+Task [5/5] Epoch [7/8]:: loss=0.3288, batch_time=5.873, acc_top1=100.00%
+Task [5/5] Epoch [8/8]:: loss=0.3403, batch_time=5.879, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 2.6585
+Finish extract class prototypes, mode: adapter, total time: 2.8383
+Task [5/5]:: Training time = 00:01:04
+Task router training accuracy: 100.00%
+Task [5/5]:: Router-Eval[1]: 96.20%
+Task [5/5]:: Eval [1/5]: eval_time=7.1s, acc_class_inc=96.20%
+Task [5/5]:: Router-Eval[2]: 99.68%
+Task [5/5]:: Eval [2/5]: eval_time=7.0s, acc_class_inc=99.68%
+Task [5/5]:: Router-Eval[3]: 93.67%
+Task [5/5]:: Eval [3/5]: eval_time=7.0s, acc_class_inc=93.67%
+Task [5/5]:: Router-Eval[4]: 96.84%
+Task [5/5]:: Eval [4/5]: eval_time=7.0s, acc_class_inc=96.84%
+Task [5/5]:: Router-Eval[5]: 100.00%
+Task [5/5]:: Eval [5/5]: eval_time=3.5s, acc_class_inc=100.00%
+:: ** Results of task [5]: [ class_inc_last_acc=96.98% | class_inc_avg_acc=98.11% | class_inc_last_forg= 0.95% ] **
+:: ** Time so far: 00:14:51 **
+100.00
+99.84
+97.36
+96.36
+96.98

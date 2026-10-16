@@ -1,0 +1,9 @@
+[tc] run F2024_fixed2_s2024
+[tc] F2024_fixed2_s2024.txt: INVALID - diverged (2 epoch(s) with loss=nan)
+[tc] F2024_fixed2_s2024: no result line
+
+## TC-MoA protocol summary
+
+| Case | seeds | Last-acc mean | min | max | Avg-acc mean | size MB | bits |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| fixed2 | - | - | - | - | - | - | - |

@@ -1,0 +1,137 @@
+Namespace(dataset='fault_csv', logs_dir='logs', logs_suffix='seedB_fixed8_s2024', logger_out_step=50, seed=2024, save_model=False, save_model_name='model_10s', evaluation=False, evaluation_model_name='model_20s', num_tasks=5, shuffle_classes=True, model='vit_base_patch16_224.augreg_in21k', pretrained_type='Sup-21k', head_dim_type='task_classes', logit_type='head_out', logit_scale=4.605170249938965, logit_scale_trainable=False, prompt_len=4, prompt_init='uniform', prompt_start_block=0, prompt_end_block=11, seperate_head=True, use_null_space=True, null_patterns='sh_prompt', null_thres_mode='adaptive', null_thres_value1=0.0, null_thres_value2=0.0, null_eta1=0.999, null_eta2=0.999, null_interm_accum='sum', ln_loss_lam=1.0, refine_head=False, transform_type='autoaug', prob_cutmixup=0, epochs=4, workers=0, eval_workers=0, expand_times=1, temperature=28.0, use_amp=True, sample_type='image', consecutive_training=True, timeout=3000, persistent_workers=False, eval_batch_size=64, lr=0.005, lr_scale=0.2, lr_scale_patterns=['patch_embed'], optimizer='mod_adam', weight_decay=5e-05, lr_sch='multistep', warmup_epochs=0, min_lr=1e-05, decay_milestones=[5, 8], decay_epochs=1000, decay_rate=0.1, show_bar=True, print_model=True, prompt_len_sh=4, prompt_len_sp=4, sh_loss=True, sp_loss=True, ca_loss=True, fa_loss=True, classifier_aggregation_type='mean', contrastive_temperature=0.05, simulation_k=20, simulation_temperature=0.2, task_detector='logit', eval_task_weight=False, eval_tau=2.0, nearest_class_selection=True, prototype_k=20, prototype_temperature=0.1, prototype_confidence_weight=0.0, prototype_ratio=0.1, topk_adapter_selection=False, adapter_k=100, eval_adapter_scale=1.0, eval_adapter_ensemble=False, eval_prototype_router=False, eval_cross_adapter_prototypes=False, eval_trained_task_router=True, eval_local_task_head=True, eval_local_task_head_task_only=False, freeze_shared_prompts_after_first=False, max_logit_score=False, previous_head=True, prototype_classifier=True, copy_weight=False, training_string=('prompt', 'head', 'adapter', 'prototypes'), train_tool='adapter', eval_tool='adapter', device_ids=[0], distributed_data=True, batch_size=32, tabular_window_length=1568, tabular_patch_size=32, tabular_in_chans=4)
+Experiment description: weighted adapter for testing ==>         we use linearly increasing k for k-nearest prototype search
+***** Start AQCL training *****
+############################## Task: [1/5] ##############################
+Current classes (2): [2 5]
+---
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:0.0000
+Task [1/5] Epoch [1/4]:: loss=1.5878, batch_time=16.120, acc_top1=69.39%
+[AQCL] sensitivity source=pre-training: 74/187 layers non-zero from 8 batch(es) (task 0)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 0)
+Task [1/5] Epoch [2/4]:: loss=0.6002, batch_time=24.841, acc_top1=92.07%
+Task [1/5] Epoch [3/4]:: loss=0.0740, batch_time=24.889, acc_top1=99.52%
+Task [1/5] Epoch [4/4]:: loss=0.0102, batch_time=24.849, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 12.3996
+Finish extract class prototypes, mode: adapter, total time: 12.3683
+Task [1/5]:: Training time = 00:02:14
+AQCL deployment: size=88.8637MB, GFLOPs=33.7004, GBOPS=1078.4123, extra_memory=0.0000MB, weight_bits=[8], activation_bits=[8]
+Task router training accuracy: 100.00%
+Task [1/5]:: Router-Eval[1]: 100.00%
+Task [1/5]:: Eval [1/1]: eval_time=4.7s, acc_class_inc=100.00%
+:: ** Results of task [1]: [ class_inc_last_acc=100.00% | class_inc_avg_acc=100.00% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:02:37 **
+100.00
+############################## Task: [2/5] ##############################
+Current classes (2): [3 0]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:12.2867
+Task [2/5] Epoch [1/4]:: loss=2.9314, batch_time=12.328, acc_top1=85.18%
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 1)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 1)
+Task [2/5] Epoch [2/4]:: loss=0.5190, batch_time=21.457, acc_top1=100.00%
+Task [2/5] Epoch [3/4]:: loss=0.3642, batch_time=21.454, acc_top1=100.00%
+Task [2/5] Epoch [4/4]:: loss=0.2721, batch_time=21.421, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 10.9375
+Finish extract class prototypes, mode: adapter, total time: 12.3763
+Task [2/5]:: Training time = 00:02:11
+AQCL deployment: size=88.8695MB, GFLOPs=33.7004, GBOPS=1078.4123, extra_memory=0.0000MB, weight_bits=[8], activation_bits=[8]
+Task router training accuracy: 100.00%
+Task [2/5]:: Router-Eval[1]: 98.42%
+Task [2/5]:: Eval [1/2]: eval_time=7.9s, acc_class_inc=98.42%
+Task [2/5]:: Router-Eval[2]: 99.37%
+Task [2/5]:: Eval [2/2]: eval_time=7.9s, acc_class_inc=99.37%
+:: ** Results of task [2]: [ class_inc_last_acc=98.89% | class_inc_avg_acc=99.45% | class_inc_last_forg= 1.58% ] **
+:: ** Time so far: 00:05:49 **
+100.00
+98.89
+############################## Task: [3/5] ##############################
+Current classes (2): [7 4]
+[AQCL] classifier head re-registered as a quantized target (task 2)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:24.5688
+Task [3/5] Epoch [1/4]:: loss=1.4336, batch_time=12.249, acc_top1=99.36%
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 2)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 2)
+Task [3/5] Epoch [2/4]:: loss=0.4476, batch_time=21.520, acc_top1=100.00%
+Task [3/5] Epoch [3/4]:: loss=0.3650, batch_time=21.525, acc_top1=100.00%
+Task [3/5] Epoch [4/4]:: loss=0.3039, batch_time=21.507, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 10.9706
+Finish extract class prototypes, mode: adapter, total time: 12.3710
+Task [3/5]:: Training time = 00:02:24
+AQCL deployment: size=88.8754MB, GFLOPs=33.7004, GBOPS=1078.4123, extra_memory=0.0000MB, weight_bits=[8], activation_bits=[8]
+Task router training accuracy: 100.00%
+Task [3/5]:: Router-Eval[1]: 99.37%
+Task [3/5]:: Eval [1/3]: eval_time=11.9s, acc_class_inc=99.37%
+Task [3/5]:: Router-Eval[2]: 100.00%
+Task [3/5]:: Eval [2/3]: eval_time=11.8s, acc_class_inc=100.00%
+Task [3/5]:: Router-Eval[3]: 90.82%
+Task [3/5]:: Eval [3/3]: eval_time=11.8s, acc_class_inc=90.82%
+:: ** Results of task [3]: [ class_inc_last_acc=96.73% | class_inc_avg_acc=98.54% | class_inc_last_forg= 0.32% ] **
+:: ** Time so far: 00:10:38 **
+100.00
+98.89
+96.73
+############################## Task: [4/5] ##############################
+Current classes (2): [1 6]
+[AQCL] classifier head re-registered as a quantized target (task 3)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:36.8844
+Task [4/5] Epoch [1/4]:: loss=1.4144, batch_time=12.444, acc_top1=98.00%
+[AQCL] sensitivity source=task-start: 74/187 layers non-zero from 8 batch(es) (task 3)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 3)
+Task [4/5] Epoch [2/4]:: loss=0.8983, batch_time=21.707, acc_top1=99.76%
+Task [4/5] Epoch [3/4]:: loss=4.1792, batch_time=21.668, acc_top1=88.78%
+Task [4/5] Epoch [4/4]:: loss=2.3069, batch_time=21.701, acc_top1=91.75%
+Finish extract class prototypes, mode: shared, total time: 10.9550
+Finish extract class prototypes, mode: adapter, total time: 12.3931
+Task [4/5]:: Training time = 00:02:37
+AQCL deployment: size=88.8813MB, GFLOPs=33.7004, GBOPS=1078.4123, extra_memory=0.0000MB, weight_bits=[8], activation_bits=[8]
+Task router training accuracy: 100.00%
+Task [4/5]:: Router-Eval[1]: 96.52%
+Task [4/5]:: Eval [1/4]: eval_time=16.8s, acc_class_inc=96.52%
+Task [4/5]:: Router-Eval[2]: 99.37%
+Task [4/5]:: Eval [2/4]: eval_time=16.6s, acc_class_inc=99.37%
+Task [4/5]:: Router-Eval[3]: 93.04%
+Task [4/5]:: Eval [3/4]: eval_time=16.5s, acc_class_inc=93.04%
+Task [4/5]:: Router-Eval[4]: 94.62%
+Task [4/5]:: Eval [4/4]: eval_time=16.5s, acc_class_inc=53.80%
+:: ** Results of task [4]: [ class_inc_last_acc=85.68% | class_inc_avg_acc=95.33% | class_inc_last_forg= 1.37% ] **
+:: ** Time so far: 00:17:55 **
+100.00
+98.89
+96.73
+85.68
+############################## Task: [5/5] ##############################
+Current classes (1): [8]
+[AQCL] classifier head re-registered as a quantized target (task 4)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:24.5601
+Task [5/5] Epoch [1/4]:: loss=1.2353, batch_time=6.376, acc_top1=100.00%
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 8 batch(es) (task 4)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 4)
+Task [5/5] Epoch [2/4]:: loss=0.6755, batch_time=10.984, acc_top1=100.00%
+Task [5/5] Epoch [3/4]:: loss=0.5791, batch_time=10.999, acc_top1=100.00%
+Task [5/5] Epoch [4/4]:: loss=0.5093, batch_time=11.015, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.4842
+Finish extract class prototypes, mode: adapter, total time: 6.2180
+Task [5/5]:: Training time = 00:01:19
+AQCL deployment: size=88.8864MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[8], activation_bits=[8]
+Task router training accuracy: 100.00%
+Task [5/5]:: Router-Eval[1]: 96.52%
+Task [5/5]:: Eval [1/5]: eval_time=22.1s, acc_class_inc=96.52%
+Task [5/5]:: Router-Eval[2]: 99.68%
+Task [5/5]:: Eval [2/5]: eval_time=22.0s, acc_class_inc=99.68%
+Task [5/5]:: Router-Eval[3]: 90.82%
+Task [5/5]:: Eval [3/5]: eval_time=21.8s, acc_class_inc=90.82%
+Task [5/5]:: Router-Eval[4]: 94.94%
+Task [5/5]:: Eval [4/5]: eval_time=21.9s, acc_class_inc=54.43%
+Task [5/5]:: Router-Eval[5]: 100.00%
+Task [5/5]:: Eval [5/5]: eval_time=11.1s, acc_class_inc=99.37%
+:: ** Results of task [5]: [ class_inc_last_acc=86.92% | class_inc_avg_acc=93.64% | class_inc_last_forg= 1.50% ] **
+:: ** Time so far: 00:26:23 **
+100.00
+98.89
+96.73
+85.68
+86.92

@@ -1,0 +1,119 @@
+Namespace(dataset='fault_csv', logs_dir='logs', logs_suffix='U_fp32_s2034', logger_out_step=50, seed=2034, save_model=False, save_model_name='model_10s', evaluation=False, evaluation_model_name='model_20s', num_tasks=5, shuffle_classes=True, model='vit_base_patch16_224.augreg_in21k', pretrained_type='Sup-21k', head_dim_type='task_classes', logit_type='head_out', logit_scale=4.605170249938965, logit_scale_trainable=False, prompt_len=4, prompt_init='uniform', prompt_start_block=0, prompt_end_block=11, seperate_head=True, use_null_space=True, null_patterns='sh_prompt', null_thres_mode='adaptive', null_thres_value1=0.0, null_thres_value2=0.0, null_eta1=0.999, null_eta2=0.999, null_interm_accum='sum', ln_loss_lam=1.0, refine_head=False, transform_type='autoaug', prob_cutmixup=0, epochs=8, workers=0, eval_workers=0, expand_times=1, temperature=28.0, use_amp=True, sample_type='image', consecutive_training=True, timeout=3000, persistent_workers=False, eval_batch_size=64, lr=0.005, lr_scale=0.2, lr_scale_patterns=['patch_embed'], optimizer='mod_adam', weight_decay=5e-05, lr_sch='multistep', warmup_epochs=0, min_lr=1e-05, decay_milestones=[5, 8], decay_epochs=1000, decay_rate=0.1, show_bar=True, print_model=True, prompt_len_sh=4, prompt_len_sp=4, sh_loss=True, sp_loss=True, ca_loss=True, fa_loss=True, classifier_aggregation_type='mean', contrastive_temperature=0.05, simulation_k=20, simulation_temperature=0.2, task_detector='logit', eval_task_weight=True, eval_tau=2.0, nearest_class_selection=True, prototype_k=20, prototype_temperature=0.1, prototype_confidence_weight=0.0, prototype_ratio=0.1, topk_adapter_selection=False, adapter_k=100, eval_adapter_scale=1.0, eval_adapter_ensemble=False, eval_prototype_router=False, eval_cross_adapter_prototypes=False, eval_trained_task_router=False, eval_local_task_head=True, eval_local_task_head_task_only=False, freeze_shared_prompts_after_first=False, max_logit_score=False, previous_head=True, prototype_classifier=True, copy_weight=False, training_string=('prompt', 'head', 'adapter', 'prototypes'), train_tool='adapter', eval_tool='adapter', device_ids=[0], distributed_data=True, batch_size=32, tabular_window_length=1568, tabular_patch_size=32, tabular_in_chans=4)
+Experiment description: weighted adapter for testing ==>         we use linearly increasing k for k-nearest prototype search
+***** Start AQCL training *****
+############################## Task: [1/5] ##############################
+Current classes (2): [2 1]
+---
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:0.0000
+Task [1/5] Epoch [1/8]:: loss=0.8084, batch_time=14.991, acc_top1=87.42%
+Task [1/5] Epoch [2/8]:: loss=0.0068, batch_time=14.551, acc_top1=100.00%
+Task [1/5] Epoch [3/8]:: loss=0.0013, batch_time=14.693, acc_top1=100.00%
+Task [1/5] Epoch [4/8]:: loss=0.0009, batch_time=14.789, acc_top1=100.00%
+Task [1/5] Epoch [5/8]:: loss=0.0008, batch_time=14.790, acc_top1=100.00%
+Task [1/5] Epoch [6/8]:: loss=0.0008, batch_time=14.834, acc_top1=100.00%
+Task [1/5] Epoch [7/8]:: loss=0.0007, batch_time=14.846, acc_top1=100.00%
+Task [1/5] Epoch [8/8]:: loss=0.0007, batch_time=14.979, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 6.5788
+Finish extract class prototypes, mode: adapter, total time: 5.4318
+Task [1/5]:: Training time = 00:02:20
+Task [1/5]:: Eval [1/1]: eval_time=1.8s, acc_class_inc=100.00%
+:: ** Results of task [1]: [ class_inc_last_acc=100.00% | class_inc_avg_acc=100.00% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:02:29 **
+100.00
+############################## Task: [2/5] ##############################
+Current classes (2): [6 0]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:5.3877
+Task [2/5] Epoch [1/8]:: loss=0.5920, batch_time=11.297, acc_top1=100.00%
+Task [2/5] Epoch [2/8]:: loss=0.4028, batch_time=11.186, acc_top1=100.00%
+Task [2/5] Epoch [3/8]:: loss=0.3230, batch_time=11.188, acc_top1=100.00%
+Task [2/5] Epoch [4/8]:: loss=0.2768, batch_time=11.184, acc_top1=100.00%
+Task [2/5] Epoch [5/8]:: loss=0.2523, batch_time=11.200, acc_top1=100.00%
+Task [2/5] Epoch [6/8]:: loss=0.2566, batch_time=11.189, acc_top1=100.00%
+Task [2/5] Epoch [7/8]:: loss=0.2529, batch_time=11.218, acc_top1=100.00%
+Task [2/5] Epoch [8/8]:: loss=0.2506, batch_time=11.228, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.1737
+Finish extract class prototypes, mode: adapter, total time: 5.4806
+Task [2/5]:: Training time = 00:01:56
+Task [2/5]:: Eval [1/2]: eval_time=1.9s, acc_class_inc=85.76%
+Task [2/5]:: Eval [2/2]: eval_time=1.9s, acc_class_inc=99.37%
+:: ** Results of task [2]: [ class_inc_last_acc=92.56% | class_inc_avg_acc=96.28% | class_inc_last_forg=14.24% ] **
+:: ** Time so far: 00:04:28 **
+100.00
+92.56
+############################## Task: [3/5] ##############################
+Current classes (2): [3 7]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:10.7646
+Task [3/5] Epoch [1/8]:: loss=0.8790, batch_time=11.247, acc_top1=97.76%
+Task [3/5] Epoch [2/8]:: loss=0.2705, batch_time=11.221, acc_top1=100.00%
+Task [3/5] Epoch [3/8]:: loss=0.2046, batch_time=11.244, acc_top1=100.00%
+Task [3/5] Epoch [4/8]:: loss=0.1753, batch_time=11.232, acc_top1=100.00%
+Task [3/5] Epoch [5/8]:: loss=0.1575, batch_time=11.252, acc_top1=100.00%
+Task [3/5] Epoch [6/8]:: loss=0.1598, batch_time=11.248, acc_top1=100.00%
+Task [3/5] Epoch [7/8]:: loss=0.1545, batch_time=11.266, acc_top1=100.00%
+Task [3/5] Epoch [8/8]:: loss=0.1506, batch_time=11.243, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.1773
+Finish extract class prototypes, mode: adapter, total time: 5.4673
+Task [3/5]:: Training time = 00:02:01
+Task [3/5]:: Eval [1/3]: eval_time=1.9s, acc_class_inc=81.65%
+Task [3/5]:: Eval [2/3]: eval_time=1.9s, acc_class_inc=99.37%
+Task [3/5]:: Eval [3/3]: eval_time=1.9s, acc_class_inc=100.00%
+:: ** Results of task [3]: [ class_inc_last_acc=93.67% | class_inc_avg_acc=95.41% | class_inc_last_forg= 9.18% ] **
+:: ** Time so far: 00:06:35 **
+100.00
+92.56
+93.67
+############################## Task: [4/5] ##############################
+Current classes (2): [4 8]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:16.2662
+Task [4/5] Epoch [1/8]:: loss=1.2137, batch_time=11.418, acc_top1=98.88%
+Task [4/5] Epoch [2/8]:: loss=0.4924, batch_time=11.383, acc_top1=100.00%
+Task [4/5] Epoch [3/8]:: loss=0.3617, batch_time=11.408, acc_top1=100.00%
+Task [4/5] Epoch [4/8]:: loss=0.3095, batch_time=11.410, acc_top1=100.00%
+Task [4/5] Epoch [5/8]:: loss=0.2809, batch_time=11.406, acc_top1=100.00%
+Task [4/5] Epoch [6/8]:: loss=0.2786, batch_time=11.422, acc_top1=100.00%
+Task [4/5] Epoch [7/8]:: loss=0.2802, batch_time=11.438, acc_top1=100.00%
+Task [4/5] Epoch [8/8]:: loss=0.2808, batch_time=11.437, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 5.2228
+Finish extract class prototypes, mode: adapter, total time: 5.4831
+Task [4/5]:: Training time = 00:02:08
+Task [4/5]:: Eval [1/4]: eval_time=2.0s, acc_class_inc=81.33%
+Task [4/5]:: Eval [2/4]: eval_time=2.0s, acc_class_inc=99.37%
+Task [4/5]:: Eval [3/4]: eval_time=2.0s, acc_class_inc=75.00%
+Task [4/5]:: Eval [4/4]: eval_time=2.0s, acc_class_inc=99.68%
+:: ** Results of task [4]: [ class_inc_last_acc=88.84% | class_inc_avg_acc=93.77% | class_inc_last_forg=14.56% ] **
+:: ** Time so far: 00:08:51 **
+100.00
+92.56
+93.67
+88.84
+############################## Task: [5/5] ##############################
+Current classes (1): [5]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:10.8643
+Task [5/5] Epoch [1/8]:: loss=1.3760, batch_time=5.833, acc_top1=100.00%
+Task [5/5] Epoch [2/8]:: loss=0.8172, batch_time=5.790, acc_top1=100.00%
+Task [5/5] Epoch [3/8]:: loss=0.6707, batch_time=5.800, acc_top1=100.00%
+Task [5/5] Epoch [4/8]:: loss=0.6000, batch_time=5.819, acc_top1=100.00%
+Task [5/5] Epoch [5/8]:: loss=0.5585, batch_time=5.783, acc_top1=100.00%
+Task [5/5] Epoch [6/8]:: loss=0.5592, batch_time=5.800, acc_top1=100.00%
+Task [5/5] Epoch [7/8]:: loss=0.5565, batch_time=5.819, acc_top1=100.00%
+Task [5/5] Epoch [8/8]:: loss=0.5431, batch_time=5.816, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 2.6295
+Finish extract class prototypes, mode: adapter, total time: 2.7800
+Task [5/5]:: Training time = 00:01:03
+Task [5/5]:: Eval [1/5]: eval_time=2.1s, acc_class_inc=66.14%
+Task [5/5]:: Eval [2/5]: eval_time=2.1s, acc_class_inc=81.01%
+Task [5/5]:: Eval [3/5]: eval_time=2.1s, acc_class_inc=75.00%
+Task [5/5]:: Eval [4/5]: eval_time=2.1s, acc_class_inc=98.10%
+Task [5/5]:: Eval [5/5]: eval_time=1.0s, acc_class_inc=80.38%
+:: ** Results of task [5]: [ class_inc_last_acc=80.10% | class_inc_avg_acc=91.04% | class_inc_last_forg=19.70% ] **
+:: ** Time so far: 00:10:03 **
+100.00
+92.56
+93.67
+88.84
+80.10

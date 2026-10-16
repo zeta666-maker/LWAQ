@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 680, in <module>
+    main()
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 639, in main
+    model = train_one_task_with_aqcl(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 571, in train_one_task_with_aqcl
+    result = original_train_one_task(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 684, in train_one_task
+    get_update_projection_dict(GVM, GVM.cache_dict['null_param_id_dict'], GVM.cache_dict['interm_tensor_dict'])
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 1668, in get_update_projection_dict
+    _, S, U_trans = torch.linalg.svd(interm_tensor_dict[_pid][_mname], full_matrices=True) ## SVD
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch._C._LinAlgError: linalg.svd: The algorithm failed to converge because the input matrix is ill-conditioned or has too many repeated singular values (error code: 768).

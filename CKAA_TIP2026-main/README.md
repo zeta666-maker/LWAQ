@@ -1,197 +1,305 @@
-# CKAA: Cross-subspace Knowledge Alignment and Aggregation for Robust Continual Learning
+# CKAA + AQCL — Continual Learning & Quantization-Aware Continual Learning
 
-Official PyTorch implementation of **CKAA**, a class-incremental learning framework built on Vision Transformers. 
+This repository contains two papers implemented and verified on a **tabular fault-diagnosis
+dataset** (`fault_csv`, 9 fault classes → 5 incremental tasks `2/2/2/2/1`):
 
-Our paper [CKAA: Cross-subspace Knowledge Alignment and Aggregation for Robust Continual Learning](https://arxiv.org/abs/2507.09471) is accepted by IEEE Transactions on Image Processing (TIP), Aug 2026.
+| Entry point | Paper | Core idea |
+| --- | --- | --- |
+| `train_eval.py` | **Algorithm 1 — CKAA** (TIP 2026, arXiv:2507.09471) | Cross-subspace Knowledge Alignment & Aggregation; task-ID-free inference via Task-Confidence-guided Mixture-of-Adapter (TC-MoA) |
+| `train_aqcl.py` | **Algorithm 2 — AQCL** | Adaptive Quantization for Stable Knowledge Acquisition in Quantization-Aware Continual Learning (hand-written QAT + RPQ + SAOU) |
 
-![CKAA framework](framework.png)
+Both algorithms share the same CKAA backbone (ViT-B/16 with a 1D tabular tokenizer,
+shared/task prompts, adapters, prototypes) and are kept **physically separated**: the CKAA
+path in `train_eval.py` is AQCL-free, and AQCL only lives in `train_aqcl.py` + `utils/aqcl.py`.
 
-## Highlights
+---
 
-- We propose a DKA training approach for Continual Learning with task-specific modules, which enhances model robustness under misleading task-IDs.
-- We propose Task-Confidence-guided Mixture-of-Adapter to better integrate task-specific information in inference without task-IDs.
-
-## Repository Structure
+## 1. Repository structure
 
 ```text
-CKAA_master/
+CKAA_TIP2026-main/
 ├── README.md
+├── requirements.txt          # Python dependencies (verified versions)
+├── .gitignore                # excludes logs/, _aqcl_work/, A_CLData/, weights, caches
+├── .env.example              # environment-variable template
 ├── LICENSE
 ├── framework.png
-├── requirements.txt
-├── train_eval.py              # Main continual training and evaluation entry point
-├── train_imagenet_a.sh        # 10-task ImageNet-A training script
-├── train_imagenet_r.sh        # 10-task ImageNet-R training script
-├── clip/                      # CLIP model, tokenizer, and text prompts
-├── tools/                     # Dataset split lists and preparation scripts
-└── utils/
-    ├── continual_manager.py   # Class-incremental task construction
-    ├── dataset_builder.py     # Unified dataset loaders and transforms
-    ├── vit_builder.py         # ViT, prompts, adapters, prototypes, and losses
-    ├── mod_adam.py            # Optimizer with projection-aware updates
-    ├── logging.py             # Console/file logger
-    ├── misc.py                # Metrics and utility functions
-    └── osutils.py             # Filesystem helpers
+├── train_eval.py             # Algorithm 1 (CKAA) entry point
+├── train_aqcl.py             # Algorithm 2 (AQCL) entry point
+├── scripts/                  # ready-to-run startup scripts
+│   ├── prepare_data.sh / .ps1        # build fault_csv from raw CSVs
+│   ├── run_ckaa.sh / .ps1            # run Algorithm 1
+│   └── run_aqcl_matrix.sh / .ps1     # run Algorithm 2 (TC-MoA matrix)
+├── utils/
+│   ├── aqcl.py               # AQCL: uniform quantizer, QAT, RPQ, SAOU, deployment report
+│   ├── aqcl_instrument.py    # per-layer quantization instrumentation
+│   ├── vit_builder.py        # ViT, prompts, adapters, prototypes, losses, tabular tokenizer
+│   ├── dataset_builder.py    # dataset routing (fault_csv / image datasets)
+│   ├── tabular_data.py       # CSV -> windows converter + tabular Dataset
+│   ├── continual_manager.py  # class-incremental task construction
+│   ├── mod_adam.py           # projection-aware Adam
+│   ├── logging.py            # console/file logger
+│   ├── misc.py               # metrics helpers
+│   └── osutils.py
+├── clip/                     # CLIP model/tokenizer (used by the text-branch of the backbone)
+├── tools/
+│   ├── run_aqcl_tcmoa_matrix.py      # Algorithm 2 matrix runner (TC-MoA protocol built-in)
+│   ├── prepare_tabular_dataset.py    # CSV -> fault_csv converter CLI
+│   ├── run_validity.py               # shared validity guard (NaN / incomplete-task detection)
+│   └── ...                           # analysis / inspection helpers
+├── docs/
+│   ├── AQCL.md                       # Algorithm 2 implementation record
+│   ├── CKAA_AUDIT.md                 # Algorithm 1 audit
+│   ├── FINAL_RESULTS_BOTH_PAPERS.md  # authoritative reproduced results
+│   ├── FINAL_TWO_PAPER_RUN.md        # two-paper run record
+│   └── archive/                      # historical handoff / checkpoint notes
+├── docs_patent/              # patent source (Chinese)
+├── docs_word/                # Word-report exports
+└── A_CLData/                 # generated at runtime (git-ignored)
+    └── fault_csv/            # processed windows/labels/meta.json
 ```
 
-## Environment
+---
 
-The experiments were developed with:
+## 2. Environment
 
-- Python 3.11.5
-- PyTorch 2.1.0
-- torchvision 0.16.0
-- CUDA-capable NVIDIA GPU, tested on RTX 3090
-
-Install dependencies:
+- **Python 3.11**, **PyTorch 2.11.0 + CUDA 12.8** (verified). Other recent PyTorch versions
+  should work, but the exact versions below were used to produce the reported numbers.
+- A CUDA-capable GPU is strongly recommended (the ViT backbone is large).
 
 ```bash
-cd CKAA_master
+# 1) PyTorch with CUDA (adjust to your driver; see https://pytorch.org/get-started/locally/)
+pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+
+# 2) Remaining dependencies
 pip install -r requirements.txt
 ```
 
-The project uses pretrained ViT weights from `timm` / Hugging Face Hub. Make sure the runtime environment can download pretrained weights, or prepare the corresponding model cache in advance.
+The pretrained ViT weights (`vit_base_patch16_224.augreg_in21k`) are downloaded automatically
+from Hugging Face Hub by `timm` on first use, and cached under `~/.cache/huggingface`.
 
-## Dataset Preparation
+> **Windows PowerShell note:** if `.ps1` scripts are blocked by the execution policy
+> (`running scripts is disabled on this system`), run them with
+> `powershell -ExecutionPolicy Bypass -File scripts\run_ckaa.ps1` (same for the other scripts),
+> or use the equivalent raw `python ...` command shown in each section below — those always work.
 
-Download the datasets you need:
+---
 
-- ImageNet-R: https://github.com/hendrycks/imagenet-r
-- ImageNet-A: https://github.com/hendrycks/natural-adv-examples
-- CIFAR-100: https://www.cs.toronto.edu/~kriz/cifar.html
-- DomainNet: https://ai.bu.edu/M3SDA/
-- CUB-200-2011: https://www.vision.caltech.edu/datasets/cub_200_2011/
-- Stanford Cars: https://ai.stanford.edu/~jkrause/cars/car_dataset.html
+## 3. Data preparation
 
-All datasets are loaded through the same folder convention:
-
-```text
-DATA_ROOT/
-├── train/
-│   ├── class_folder_1/
-│   │   ├── image_1.jpg
-│   │   └── image_2.jpg
-│   └── class_folder_2/
-│       └── image_3.jpg
-└── val/
-    ├── class_folder_1/
-    │   └── image_4.jpg
-    └── class_folder_2/
-        └── image_5.jpg
-```
-
-Dataset helpers and split files are provided in `tools/`. Before running a split script, update the hard-coded `root_dir` and split-list paths in the corresponding script so they match your local directory layout.
-
-The current default dataset roots in `train_eval.py` are:
-
-| Dataset argument | Default root |
-| --- | --- |
-| `cifar100` | `A_CLData/cifar100-split` |
-| `imagenet_r` | `A_CLData/imagenet-r` |
-| `imagenet_a` | `A_CLData/imagenet-a` |
-| `sdomainet` | `A_CLData/domainnet` |
-| `cub` | `A_CLData/cub` |
-| `stanford_cars` | `A_CLData/stanford_cars` |
-
-If your datasets are stored elsewhere, update this mapping in `train_eval.py` or adjust the scripts to point to your data location.
-
-## Training
-
-From the parent directory of `CKAA_master`, run:
-
-```bash
-bash CKAA_master/train_imagenet_r.sh
-```
-
-or:
-
-```bash
-bash CKAA_master/train_imagenet_a.sh
-```
-
-Both scripts launch 10-task class-incremental experiments with a ViT-B/16 backbone:
-
-```bash
-python CKAA_master/train_eval.py \
-  -d imagenet_r \
-  -sf 10s_imagenet_r \
-  -m vit_base_patch16_224.augreg_in21k \
-  -b 110 \
-  --temperature 28.0 \
-  -tf 0.05 \
-  -kg 20 \
-  -tg 0.2 \
-  -tc 3.0 \
-  -kc 10 \
-  --null_eta1 0.97 \
-  --null_eta2 0.97 \
-  --seed 2024
-```
-
-Common options:
-
-| Option | Description |
-| --- | --- |
-| `-d`, `--dataset` | Dataset key: `cifar100`, `imagenet_r`, `imagenet_a`, `sdomainet`, `cub`, or `stanford_cars` |
-| `-t`, `--num_tasks` | Number of continual tasks |
-| `-m`, `--model` | `timm` model name |
-| `-b`, `--batch_size` | Training batch size |
-| `-e`, `--epochs` | Epochs per task |
-| `--seed` | Random seed for class order and training |
-| `--logs-dir` | Output directory for logs |
-| `-sf`, `--logs-suffix` | Log filename suffix |
-
-Training logs are written to:
+The dataset is built from raw vibration / pressure CSV streams. The raw data is **not
+committed** (it is large and kept locally); you must provide it under `data_1_S1/` and
+`data_2_S1/`:
 
 ```text
-logs/<logs-suffix>.txt
+<RAW_ROOT>/
+├── data_1_S1/     # one vibration signal column per CSV
+└── data_2_S1/     # pressure X/Y/Z columns (columns 1:4)
 ```
 
-## Tabular Vibration and Pressure-XYZ Workflow
+By default `<RAW_ROOT>` is the **parent directory of this repository** (`..`). To use another
+location, set the `DATA_RAW_ROOT` environment variable (see `.env.example`).
 
-The tabular entry point supports the nine fault classes stored in `data_1_S1`
-and `data_2_S1`. The first directory supplies the vibration channel and the
-second supplies pressure XYZ. The converter aligns both streams, normalizes
-each physical channel, treats every empty CSV field as the raw value zero, and
-stores non-overlapping windows as memory-mapped arrays:
+Build the processed `fault_csv` dataset (window length 1568, stride 1568, 4 channels
+`[vibration, pressure_x, pressure_y, pressure_z]`, 80/20 train/eval split):
 
 ```bash
-python tools/prepare_tabular_dataset.py \
-  --raw-root .. \
-  --output-root A_CLData/tabular_ckaa
+# Linux / macOS
+bash scripts/prepare_data.sh
+# Windows PowerShell
+.\scripts\prepare_data.ps1
+# or directly:
+python tools/prepare_tabular_dataset.py --raw-root .. --output-root A_CLData/fault_csv --overwrite
 ```
 
-The tabular ViT replaces the 2D patch embedding with a 1D tokenizer while
-retaining 196 patches plus the class token. This keeps the CKAA prompt,
-adapter, dual-level alignment, and null-space projections unchanged.
+This writes `A_CLData/fault_csv/{train,eval}_{windows,labels}.npy`, `*_index.csv`, and a
+**portable** `meta.json` whose file paths are relative to the dataset directory (no
+machine-specific absolute paths).
 
-Run the default three-task continual-learning experiment with:
+---
+
+## 4. Algorithm 1 — CKAA
+
+### 4.1 Background
+
+CKAA (Cross-subspace Knowledge Alignment and Aggregation) is a class-incremental learning
+framework on ViT. It builds task-specific prompts/adapters and aligns them across subspaces
+(cross-subspace alignment) to reduce inter-task interference, and it updates shared prompts
+in the null space of previously seen tasks to protect old knowledge. At inference it uses a
+confidence-weighted **Mixture-of-Adapter (TC-MoA)** so no external task ID is required.
+
+### 4.2 Core flow
+
+1. Build 5 incremental tasks from the 9 fault classes (`2/2/2/2/1`).
+2. For each task, train the task prompt/adapter/head while freezing the backbone and (after
+   the first task) the shared prompt.
+3. After each task, evaluate all seen tasks and record
+   `class_inc_last_acc / class_inc_avg_acc / class_inc_last_forg`.
+4. Select the task adapter with a trained task router (`--eval-trained-task-router true`).
+
+### 4.3 Run (training + evaluation, one command)
 
 ```bash
-bash train_tabular.sh
+# Linux / macOS
+bash scripts/run_ckaa.sh
+# Windows PowerShell
+.\scripts\run_ckaa.ps1
+# or directly:
+python train_eval.py \
+  -d fault_csv -t 5 -m vit_base_patch16_224.augreg_in21k \
+  -b 32 -e 12 -jt 0 -je 0 -et 1 \
+  --eval_batch_size 64 --temperature 28.0 \
+  --lr 0.005 --lr_scale 0.2 --lr_scale_patterns patch_embed \
+  --null_eta1 0.999 --null_eta2 0.999 -tc 2.0 \
+  --eval-tool adapter \
+  --eval-trained-task-router true --eval-local-task-head true --eval-task-weight false \
+  --freeze-shared-prompts-after-first true --prototype-confidence-weight 0.0 \
+  --seed 2024 --save-model false --logs-dir logs -sf ckaa_paper1_s2024
 ```
 
-On Windows PowerShell, use:
+### 4.4 Key parameters
 
-```powershell
-.\train_tabular.ps1
+| Flag | Value | Meaning |
+| --- | --- | --- |
+| `-d` / `--dataset` | `fault_csv` | tabular fault dataset |
+| `-t` / `--num_tasks` | `5` | 5 tasks, class split `2/2/2/2/1` |
+| `-e` / `--epochs` | `12` | epochs per task |
+| `-m` / `--model` | `vit_base_patch16_224.augreg_in21k` | ViT-B/16 backbone |
+| `-b` | `32` | training batch size |
+| `-jt` / `-je` | `0` | DataLoader workers = 0 (most portable) |
+| `--temperature` | `28.0` | logit temperature |
+| `--lr` / `--lr_scale` | `0.005` / `0.2` | base lr; scale for `patch_embed` |
+| `--null_eta1/2` | `0.999` | null-space update decay |
+| `-tc` / `--eval-tau` | `2.0` | TC-MoA temperature |
+| `--eval-tool` | `adapter` | adapter-based evaluation |
+| `--eval-trained-task-router` | `true` | trained task router for adapter selection |
+| `--eval-local-task-head` | `true` | use the selected task head |
+| `--eval-task-weight` | `false` | do not weight heads by router confidence |
+| `--freeze-shared-prompts-after-first` | `true` | freeze shared prompt after task 1 |
+| `--prototype-confidence-weight` | `0.0` | prototype confidence disabled |
+| `--seed` | `2024` | random seed |
+
+### 4.5 Evaluation metrics
+
+- **Last-acc** (`class_inc_last_acc`): class-incremental accuracy after the final (5th) task.
+- **Avg-acc** (`class_inc_avg_acc`): average class-incremental accuracy over the 5 tasks.
+- **Forgetting** (`class_inc_last_forg`): backward-transfer forgetting of earlier tasks.
+
+### 4.6 Reproduced result
+
+| Metric | Value |
+| --- | ---: |
+| Last-acc | **95.99%** |
+| Avg-acc | **97.92%** |
+| Forgetting | **2.37%** |
+
+Log: `logs/ckaa_paper1_s2024.txt` (produced by the command above).
+
+---
+
+## 5. Algorithm 2 — AQCL
+
+### 5.1 Background
+
+AQCL studies quantization-aware continual learning: it keeps a quantized model (asymmetric
+uniform quantization + straight-through QAT) and adds three mechanisms so that low-bit
+training does not destroy previously learned tasks:
+
+- **RPQ** (sensitivity/robustness-aware bit allocation): allocate higher bit-width to
+  quantization-sensitive layers.
+- **SAOU** (stable anti-overfitting / orthogonal updates): project weight updates onto a
+  subspace that avoids overwriting old tasks.
+- **TC-MoA** evaluation protocol: confidence-weighted adapter mixture, deterministic across
+  runs (no learned RandomForest router), so different bit-widths are directly comparable.
+
+### 5.2 Core flow
+
+1. Run the same CKAA backbone/adapters as Algorithm 1, but with quantization enabled
+   (`train_aqcl.py`).
+2. One warm-up epoch in FP32, then the target bit-width is enabled.
+3. Per-task: Fisher/activation calibration → bit allocation (RPQ) → gradient modulation
+   (SAOU) → QAT training.
+4. After each task, print the `AQCL deployment:` line (model size / GFLOPs / GBOPS / bit map)
+   and the same `class_inc_*` metrics.
+
+### 5.3 Run (TC-MoA comparison matrix)
+
+The runner `tools/run_aqcl_tcmoa_matrix.py` already embeds the TC-MoA protocol; run it
+without modifying its internal commands:
+
+```bash
+# Linux / macOS
+bash scripts/run_aqcl_matrix.sh
+# Windows PowerShell
+.\scripts\run_aqcl_matrix.ps1
+# or directly:
+python tools/run_aqcl_tcmoa_matrix.py \
+  --cases fp32,fixed8,fixed4,fixed2 \
+  --seeds 2024,2025 \
+  --epochs 8
 ```
 
-The reference run uses five incremental tasks with two classes per task
-(`2/2/2/2/1`), eight epochs, `eta=0.999`, task-specific adapter
-prototype routing, and a shared prompt frozen after the first task.
-Later tasks only update their own adapters and heads, so the frozen
-prototypes select the relevant subspace without an external task ID.
+### 5.4 Key parameters (built into the runner)
 
-## Citation
+| Parameter | Value | Meaning |
+| --- | --- | --- |
+| `--cases` | `fp32,fixed8,fixed4,fixed2` | no-quant / uniform 8 / 4 / 2-bit |
+| `--seeds` | `2024,2025` | two seeds per case |
+| `--epochs` | `8` | epochs per task |
+| eval protocol | `--eval-trained-task-router false --eval-task-weight true` | TC-MoA confidence mixture |
+| `--aqcl-fisher-batches` | `8` | Fisher/sensitivity sampling |
+| `--aqcl-warmup-epochs` | `1` | FP32 warm-up before quantization |
+| `--aqcl-calibrate-batches` | `4` | activation-range calibration |
+| `--aqcl-per-token-activation` | `true` | per-token activation quantization |
 
-If you find this work useful, please consider citing:
+### 5.5 Reproduced results (TC-MoA protocol)
+
+| Case | seed | Last-acc | Avg-acc | Forgetting | size | bits |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| fp32 | 2024 | 84.88 | 93.43 | 14.24 | — | — |
+| fp32 | 2025 | 83.33 | 93.82 | 12.82 | — | — |
+| fixed8 | 2024 | 80.87 | 90.98 | 16.93 | 88.89 MB | [8] |
+| fixed8 | 2025 | 86.01 | 93.35 | 13.69 | 88.89 MB | [8] |
+| fixed4 | 2024 | 68.85 | 83.94 | 31.25 | 45.54 MB | [4] |
+| fixed4 | 2025 | 69.76 | 85.57 | 29.43 | 45.54 MB | [4] |
+| **fixed2** | **2024** | **INVALID — diverged (`loss=nan` on task 3)** | | | | [2] |
+| fixed2 | 2025 | 42.19 | 56.85 | 35.28 | 23.87 MB | [2] |
+
+> **fixed2 seed 2024 NaN note (matches `docs/FINAL_RESULTS_BOTH_PAPERS.md`):** the 2-bit run
+> with seed 2024 diverges — task 3 reports two `loss=nan` epochs (`qkv_grad_norm=nan`). The
+> validity guard (`tools/run_validity.py`) therefore marks it **INVALID** and it is excluded
+> from the summary. This is a known instability of the 2-bit operating point: some seeds abort
+> or diverge, while the seeds that finish span a wide range. The **valid** 2-bit seed 2025
+> result is **Last-acc 42.19 / Avg-acc 56.85 / Forgetting 35.28**.
+
+Expected trend (consistent with the AQCL paper): **fp32 ≥ 8-bit ≥ 4-bit > 2-bit**, with model
+size and GBOPS decreasing monotonically as bit-width drops (88.89 MB → 45.54 MB → 23.87 MB).
+
+---
+
+## 6. Configuration
+
+Copy `.env.example` to `.env` (git-ignored) and override as needed:
+
+| Variable | Default | Used by |
+| --- | --- | --- |
+| `DATA_RAW_ROOT` | `..` (repo parent) | `scripts/prepare_data.*` |
+| `CUDA_VISIBLE_DEVICES` | `0` | all training |
+| `SEED` / `EPOCHS` / `CKAA_SUFFIX` | `2024` / `12` / `ckaa_paper1_s<seed>` | `scripts/run_ckaa.*` |
+| `AQCL_CASES` / `AQCL_SEEDS` / `AQCL_EPOCHS` / `AQCL_PREFIX` | `fp32,fixed8,fixed4,fixed2` / `2024,2025` / `8` / `tc` | `scripts/run_aqcl_matrix.*` |
+
+All data/code paths are **relative** (`A_CLData/fault_csv`, `logs/`, `scripts/...`); no
+machine-specific absolute paths are hardcoded in the source or the generated `meta.json`.
+
+---
+
+## 7. Citation
 
 ```bibtex
 @article{he2025ckaa,
   title={Ckaa: Cross-subspace knowledge alignment and aggregation for robust continual learning},
   author={He, Lingfeng and Cheng, De and Ma, Zhiheng and Wang, Huaijie and Zhang, Dingwen and Wang, Nannan and Gao, Xinbo},
-  journal={arXiv preprint arXiv:2507.09471},
-  year={2025}
+  journal={IEEE Transactions on Image Processing (TIP)},
+  year={2026}
 }
 ```

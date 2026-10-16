@@ -1,0 +1,38 @@
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 744, in <module>
+    main()
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 703, in main
+    model = train_one_task_with_aqcl(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 635, in train_one_task_with_aqcl
+    result = original_train_one_task(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 669, in train_one_task
+    _epoch_scalar_str = train_one_epoch(GVM, taskid, epoch, dataloader, model, criterion, optimizer, 
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_aqcl.py", line 558, in train_one_epoch_with_warmup
+    return original_train_one_epoch(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\train_eval.py", line 502, in train_one_epoch
+    logits = model.module.task_head[taskid](input_feats)[:, :(taskid+1) * GVM.cl_mngr.num_classes_per_task]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\utils\aqcl.py", line 457, in forward
+    xq = self.activation_quant(x)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\utils\aqcl.py", line 390, in forward
+    self._assert_finite(x, x_min, x_max, level, q)
+  File "C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\utils\aqcl.py", line 340, in _assert_finite
+    raise FloatingPointError(
+FloatingPointError: AQCL quantization produced a non-finite output in task_head.2.activation [activations]: 79872 of 79872 elements at bits=2, range_mode=ema, reduce=channel, span=nan, step NON-FINITE (768 of 768), input_absmax=2.017e+01. Set AQCL_ALLOW_NONFINITE=1 to downgrade to a warning.

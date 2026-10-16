@@ -216,3 +216,30 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# =============================================================================
+# Project-specific ignores (CKAA + AQCL)
+# =============================================================================
+
+# Training logs and the AQCL work directory (child-process stdout/stderr)
+logs/
+_aqcl_work/
+
+# Model checkpoints / saved weights (exceed GitHub's 100 MB per-file limit)
+specific-shared/
+*.pkl
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Processed tabular dataset (regenerate with tools/prepare_tabular_dataset.py)
+A_CLData/
+
+# Raw CSV streams (large; place locally, see README -> Data preparation)
+data_1_S1/
+data_2_S1/
+
+# Local environment / configuration
+.env
+.env.local

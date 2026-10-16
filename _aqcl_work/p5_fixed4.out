@@ -1,0 +1,189 @@
+Namespace(dataset='fault_csv', logs_dir='logs', logs_suffix='p5_fixed4', logger_out_step=50, seed=2024, save_model=False, save_model_name='model_10s', evaluation=False, evaluation_model_name='model_20s', num_tasks=5, shuffle_classes=True, model='vit_base_patch16_224.augreg_in21k', pretrained_type='Sup-21k', head_dim_type='task_classes', logit_type='head_out', logit_scale=4.605170249938965, logit_scale_trainable=False, prompt_len=4, prompt_init='uniform', prompt_start_block=0, prompt_end_block=11, seperate_head=True, use_null_space=True, null_patterns='sh_prompt', null_thres_mode='adaptive', null_thres_value1=0.0, null_thres_value2=0.0, null_eta1=0.999, null_eta2=0.999, null_interm_accum='sum', ln_loss_lam=1.0, refine_head=False, transform_type='autoaug', prob_cutmixup=0, epochs=2, workers=0, eval_workers=0, expand_times=1, temperature=28.0, use_amp=True, sample_type='image', consecutive_training=True, timeout=3000, persistent_workers=False, eval_batch_size=64, lr=0.005, lr_scale=0.2, lr_scale_patterns=['patch_embed'], optimizer='mod_adam', weight_decay=5e-05, lr_sch='multistep', warmup_epochs=0, min_lr=1e-05, decay_milestones=[5, 8], decay_epochs=1000, decay_rate=0.1, show_bar=True, print_model=True, prompt_len_sh=4, prompt_len_sp=4, sh_loss=True, sp_loss=True, ca_loss=True, fa_loss=True, classifier_aggregation_type='mean', contrastive_temperature=0.05, simulation_k=20, simulation_temperature=0.2, task_detector='logit', eval_task_weight=False, eval_tau=2.0, nearest_class_selection=True, prototype_k=20, prototype_temperature=0.1, prototype_confidence_weight=0.0, prototype_ratio=0.1, topk_adapter_selection=False, adapter_k=100, eval_adapter_scale=1.0, eval_adapter_ensemble=False, eval_prototype_router=False, eval_cross_adapter_prototypes=False, eval_trained_task_router=True, eval_local_task_head=True, eval_local_task_head_task_only=False, freeze_shared_prompts_after_first=False, max_logit_score=False, previous_head=True, prototype_classifier=True, copy_weight=False, training_string=('prompt', 'head', 'adapter', 'prototypes'), train_tool='adapter', eval_tool='adapter', device_ids=[0], distributed_data=True, batch_size=32, tabular_window_length=1568, tabular_patch_size=32, tabular_in_chans=4)
+Experiment description: weighted adapter for testing ==>         we use linearly increasing k for k-nearest prototype search
+***** Start AQCL training *****
+############################## Task: [1/5] ##############################
+Current classes (2): [2 5]
+---
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:0.0000
+[AQCL-INSTRUMENT][logits] task=0 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=0.781 fp32_saturated=0.000 amplification=nanx
+Task [1/5] Epoch [1/2]:: loss=1.5691, batch_time=16.140, acc_top1=68.59%
+[AQCL-INSTRUMENT][fisher_warmup] task=0 batches=2 layers=187 nonzero_layers=74
+[AQCL] sensitivity source=pre-training: 74/187 layers non-zero from 2 batch(es) (task 0)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 0)
+[AQCL-INSTRUMENT][logits] task=0 epoch=2 quant_enabled=True quant_absmax=115.759 quant_saturated=0.750 fp32_absmax=122.049 fp32_saturated=0.656 amplification=0.95x
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.10.mlp.fc1 min=-203.3875 max=125.6190 step=1.290222
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.9.mlp.fc1 min=-85.6833 max=78.9201 step=0.645503
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.8.mlp.fc1 min=-32.5477 max=41.1574 step=0.289040
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.6.mlp.fc1 min=-41.8362 max=12.0132 step=0.211174
+[AQCL-INSTRUMENT][act_range] task=0 epoch=2 blocks.11.mlp.fc1 min=-32.9861 max=19.9545 step=0.207610
+Task [1/5] Epoch [2/2]:: loss=0.7955, batch_time=29.625, acc_top1=85.10%
+Finish extract class prototypes, mode: shared, total time: 13.9622
+Finish extract class prototypes, mode: adapter, total time: 14.0963
+Task [1/5]:: Training time = 00:01:33
+[AQCL-INSTRUMENT][fisher] task=0 batch=0 loss=10.268845 logits[shape=(32, 2) min=-51.344 max=52.000 mean=0.666 absmax=52.000] target=[0, 0, 1, 0, 0, 0, 1, 0] qkv_grad_norm=2.657e+01 grad_non_none=74/187 max_abs_grad=1.005e+01 sum_layer_grad_norm=1.484370e+03 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=0 batch=1 loss=14.230331 logits[shape=(32, 2) min=-53.906 max=54.250 mean=0.501 absmax=54.250] target=[0, 0, 1, 1, 0, 1, 0, 1] qkv_grad_norm=4.311e+01 grad_non_none=74/187 max_abs_grad=9.984e+00 sum_layer_grad_norm=1.619475e+03 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=0 targets=187 grad_None_layers=113 grad_all_zero_layers=0 grad_nonzero_layers=74 alive_layers=74 batch_grad_norms=['1.484e+03', '1.619e+03']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj', 'blocks.0.task_adapter.2.down_proj', 'blocks.0.task_adapter.2.up_proj']
+AQCL deployment: size=86.0276MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[4, 8], activation_bits=[4, 8]
+Task router training accuracy: 100.00%
+Task [1/5]:: Router-Eval[1]: 100.00%
+Task [1/5]:: Eval [1/1]: eval_time=5.7s, acc_class_inc=97.78%
+:: ** Results of task [1]: [ class_inc_last_acc=97.78% | class_inc_avg_acc=97.78% | class_inc_last_forg= 0.00% ] **
+:: ** Time so far: 00:01:56 **
+97.78
+############################## Task: [2/5] ##############################
+Current classes (2): [3 0]
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:14.0279
+[AQCL-INSTRUMENT][logits] task=1 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=62.307 fp32_saturated=0.969 amplification=nanx
+Task [2/5] Epoch [1/2]:: loss=2.1704, batch_time=12.364, acc_top1=91.67%
+[AQCL-INSTRUMENT][fisher_warmup] task=1 batches=2 layers=187 nonzero_layers=0
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 2 batch(es) (task 1)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 1)
+[AQCL-INSTRUMENT][logits] task=1 epoch=2 quant_enabled=True quant_absmax=110.480 quant_saturated=0.969 fp32_absmax=143.639 fp32_saturated=1.000 amplification=0.77x
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.10.mlp.fc1 min=-209.1096 max=114.6468 step=1.269633
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.9.mlp.fc1 min=-89.8715 max=55.0983 step=0.568509
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.8.mlp.fc1 min=-34.0390 max=26.3727 step=0.236908
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.6.mlp.fc1 min=-41.7791 max=12.2025 step=0.211693
+[AQCL-INSTRUMENT][act_range] task=1 epoch=2 blocks.5.mlp.fc1 min=-42.9190 max=8.0308 step=0.199803
+Task [2/5] Epoch [2/2]:: loss=1.2876, batch_time=25.967, acc_top1=94.71%
+Finish extract class prototypes, mode: shared, total time: 12.2714
+Finish extract class prototypes, mode: adapter, total time: 14.0941
+Task [2/5]:: Training time = 00:01:38
+[AQCL-INSTRUMENT][fisher] task=1 batch=0 loss=0.000000 logits[shape=(32, 2) min=-160.500 max=163.500 mean=0.479 absmax=163.500] target=[0, 1, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=1 batch=1 loss=0.000000 logits[shape=(32, 2) min=-162.375 max=165.375 mean=0.750 absmax=165.375] target=[1, 0, 1, 0, 1, 0, 1, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=1 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=0 batch_grad_norms=['0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.2.down_proj', 'blocks.0.task_adapter.2.up_proj']
+AQCL deployment: size=86.0335MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[4, 8], activation_bits=[4, 8]
+Task router training accuracy: 100.00%
+Task [2/5]:: Router-Eval[1]: 37.03%
+Task [2/5]:: Eval [1/2]: eval_time=9.8s, acc_class_inc=30.06%
+Task [2/5]:: Router-Eval[2]: 86.39%
+Task [2/5]:: Eval [2/2]: eval_time=9.7s, acc_class_inc=75.00%
+:: ** Results of task [2]: [ class_inc_last_acc=52.53% | class_inc_avg_acc=75.16% | class_inc_last_forg=67.72% ] **
+:: ** Time so far: 00:04:46 **
+97.78
+52.53
+############################## Task: [3/5] ##############################
+Current classes (2): [7 4]
+[AQCL] classifier head re-registered as a quantized target (task 2)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:27.8784
+[AQCL-INSTRUMENT][logits] task=2 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=3.032 fp32_saturated=0.000 amplification=nanx
+Task [3/5] Epoch [1/2]:: loss=1.0002, batch_time=12.309, acc_top1=99.84%
+[AQCL-INSTRUMENT][fisher_warmup] task=2 batches=2 layers=187 nonzero_layers=0
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 2 batch(es) (task 2)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 2)
+[AQCL-INSTRUMENT][logits] task=2 epoch=2 quant_enabled=True quant_absmax=136.523 quant_saturated=1.000 fp32_absmax=151.832 fp32_saturated=1.000 amplification=0.90x
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.10.mlp.fc1 min=-175.0337 max=110.6157 step=1.120194
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.9.mlp.fc1 min=-80.3371 max=55.0485 step=0.530924
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.8.mlp.fc1 min=-32.5998 max=28.9590 step=0.241407
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.6.mlp.fc1 min=-41.7401 max=12.7794 step=0.213802
+[AQCL-INSTRUMENT][act_range] task=2 epoch=2 blocks.5.mlp.fc1 min=-42.6329 max=9.9553 step=0.206228
+Task [3/5] Epoch [2/2]:: loss=0.2207, batch_time=26.153, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 12.2649
+Finish extract class prototypes, mode: adapter, total time: 14.1223
+Task [3/5]:: Training time = 00:01:52
+[AQCL-INSTRUMENT][fisher] task=2 batch=0 loss=0.000000 logits[shape=(32, 2) min=-168.000 max=167.625 mean=0.383 absmax=168.000] target=[1, 0, 0, 1, 1, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=2 batch=1 loss=0.000000 logits[shape=(32, 2) min=-169.250 max=168.500 mean=0.414 absmax=169.250] target=[1, 0, 0, 1, 1, 1, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=2 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=0 batch_grad_norms=['0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=86.0394MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[4, 8], activation_bits=[4, 8]
+Task router training accuracy: 100.00%
+Task [3/5]:: Router-Eval[1]: 78.16%
+Task [3/5]:: Eval [1/3]: eval_time=15.0s, acc_class_inc=49.05%
+Task [3/5]:: Router-Eval[2]: 66.77%
+Task [3/5]:: Eval [2/3]: eval_time=14.9s, acc_class_inc=63.61%
+Task [3/5]:: Router-Eval[3]: 89.24%
+Task [3/5]:: Eval [3/3]: eval_time=14.9s, acc_class_inc=89.24%
+:: ** Results of task [3]: [ class_inc_last_acc=67.30% | class_inc_avg_acc=72.54% | class_inc_last_forg=30.06% ] **
+:: ** Time so far: 00:09:39 **
+97.78
+52.53
+67.30
+############################## Task: [4/5] ##############################
+Current classes (2): [1 6]
+[AQCL] classifier head re-registered as a quantized target (task 3)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:41.9769
+[AQCL-INSTRUMENT][logits] task=3 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=3.438 fp32_saturated=0.000 amplification=nanx
+Task [4/5] Epoch [1/2]:: loss=3.2668, batch_time=12.501, acc_top1=85.66%
+[AQCL-INSTRUMENT][fisher_warmup] task=3 batches=2 layers=187 nonzero_layers=0
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 2 batch(es) (task 3)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 3)
+[AQCL-INSTRUMENT][logits] task=3 epoch=2 quant_enabled=True quant_absmax=54.365 quant_saturated=0.750 fp32_absmax=62.210 fp32_saturated=1.000 amplification=0.87x
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.10.mlp.fc1 min=-102.4946 max=106.4542 step=0.819407
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.9.mlp.fc1 min=-60.6059 max=70.8473 step=0.515503
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.8.mlp.fc1 min=-28.6035 max=36.2893 step=0.254482
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.3.mlp.fc1 min=-35.7968 max=5.1160 step=0.160442
+[AQCL-INSTRUMENT][act_range] task=3 epoch=2 blocks.11.mlp.fc1 min=-19.9186 max=20.1456 step=0.157114
+Task [4/5] Epoch [2/2]:: loss=0.7115, batch_time=26.363, acc_top1=98.80%
+Finish extract class prototypes, mode: shared, total time: 12.2312
+Finish extract class prototypes, mode: adapter, total time: 14.0652
+Task [4/5]:: Training time = 00:02:06
+[AQCL-INSTRUMENT][fisher] task=3 batch=0 loss=0.000000 logits[shape=(32, 2) min=-107.500 max=103.938 mean=-1.421 absmax=107.500] target=[0, 1, 1, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=3 batch=1 loss=0.000000 logits[shape=(32, 2) min=-98.625 max=95.875 mean=-0.955 absmax=98.625] target=[0, 1, 0, 0, 1, 0, 1, 1] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=3 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=0 batch_grad_norms=['0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=86.0452MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[4, 8], activation_bits=[4, 8]
+Task router training accuracy: 100.00%
+Task [4/5]:: Router-Eval[1]: 45.57%
+Task [4/5]:: Eval [1/4]: eval_time=21.1s, acc_class_inc=24.37%
+Task [4/5]:: Router-Eval[2]: 55.70%
+Task [4/5]:: Eval [2/4]: eval_time=20.8s, acc_class_inc=55.70%
+Task [4/5]:: Router-Eval[3]: 81.65%
+Task [4/5]:: Eval [3/4]: eval_time=20.8s, acc_class_inc=81.65%
+Task [4/5]:: Router-Eval[4]: 43.35%
+Task [4/5]:: Eval [4/4]: eval_time=20.8s, acc_class_inc=43.35%
+:: ** Results of task [4]: [ class_inc_last_acc=51.27% | class_inc_avg_acc=67.22% | class_inc_last_forg=33.44% ] **
+:: ** Time so far: 00:17:36 **
+97.78
+52.53
+67.30
+51.27
+############################## Task: [5/5] ##############################
+Current classes (1): [8]
+[AQCL] classifier head re-registered as a quantized target (task 4)
+Extract current data in previous subspaces
+Finish extract current data in previous subspaces, time:28.1183
+[AQCL-INSTRUMENT][logits] task=4 epoch=1 quant_enabled=False quant_absmax=nan quant_saturated=nan fp32_absmax=5.920 fp32_saturated=1.000 amplification=nanx
+Task [5/5] Epoch [1/2]:: loss=1.2179, batch_time=6.420, acc_top1=100.00%
+[AQCL-INSTRUMENT][fisher_warmup] task=4 batches=2 layers=187 nonzero_layers=0
+[AQCL] sensitivity source=task-start: 0/187 layers non-zero from 2 batch(es) (task 4)
+[AQCL] calibrated quantization ranges from 4 batch(es) over 187 layers (task 4)
+[AQCL-INSTRUMENT][logits] task=4 epoch=2 quant_enabled=True quant_absmax=0.678 quant_saturated=1.000 fp32_absmax=0.681 fp32_saturated=1.000 amplification=1.00x
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.10.mlp.fc1 min=-83.2185 max=52.1517 step=0.530864
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.9.mlp.fc1 min=-65.2599 max=40.8741 step=0.416212
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.4.mlp.fc1 min=-38.3644 max=7.3671 step=0.179339
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.3.mlp.fc1 min=-37.2548 max=6.0773 step=0.169930
+[AQCL-INSTRUMENT][act_range] task=4 epoch=2 blocks.5.mlp.fc1 min=-35.0941 max=6.4345 step=0.162857
+Task [5/5] Epoch [2/2]:: loss=0.5922, batch_time=13.470, acc_top1=100.00%
+Finish extract class prototypes, mode: shared, total time: 6.1613
+Finish extract class prototypes, mode: adapter, total time: 7.0815
+Task [5/5]:: Training time = 00:01:04
+[AQCL-INSTRUMENT][fisher] task=4 batch=0 loss=0.000000 logits[shape=(32, 1) min=0.051 max=0.147 mean=0.084 absmax=0.147] target=[0, 0, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher] task=4 batch=1 loss=0.000000 logits[shape=(32, 1) min=0.050 max=0.149 mean=0.097 absmax=0.149] target=[0, 0, 0, 0, 0, 0, 0, 0] qkv_grad_norm=0.000e+00 grad_non_none=74/187 max_abs_grad=0.000e+00 sum_layer_grad_norm=0.000000e+00 head.grad_None=False
+[AQCL-INSTRUMENT][fisher_summary] task=4 targets=187 grad_None_layers=113 grad_all_zero_layers=74 grad_nonzero_layers=0 alive_layers=0 batch_grad_norms=['0.000e+00', '0.000e+00']
+[AQCL-INSTRUMENT][fisher_summary] grad_None examples: ['blocks.0.prompt_linear', 'blocks.0.task_adapter.0.down_proj', 'blocks.0.task_adapter.0.up_proj', 'blocks.0.task_adapter.1.down_proj', 'blocks.0.task_adapter.1.up_proj']
+AQCL deployment: size=86.0507MB, GFLOPs=33.7004, GBOPS=1078.4122, extra_memory=0.0000MB, weight_bits=[4, 8], activation_bits=[4, 8]
+Task router training accuracy: 100.00%
+Task [5/5]:: Router-Eval[1]: 75.63%
+Task [5/5]:: Eval [1/5]: eval_time=28.1s, acc_class_inc=43.99%
+Task [5/5]:: Router-Eval[2]: 73.73%
+Task [5/5]:: Eval [2/5]: eval_time=27.8s, acc_class_inc=68.35%
+Task [5/5]:: Router-Eval[3]: 87.34%
+Task [5/5]:: Eval [3/5]: eval_time=27.7s, acc_class_inc=87.34%
+Task [5/5]:: Router-Eval[4]: 38.92%
+Task [5/5]:: Eval [4/5]: eval_time=27.6s, acc_class_inc=38.92%
+Task [5/5]:: Router-Eval[5]: 78.48%
+Task [5/5]:: Eval [5/5]: eval_time=14.5s, acc_class_inc=78.48%
+:: ** Results of task [5]: [ class_inc_last_acc=61.74% | class_inc_avg_acc=66.13% | class_inc_last_forg=16.69% ] **
+:: ** Time so far: 00:27:43 **
+97.78
+52.53
+67.30
+51.27
+61.74
+[AQCL-INSTRUMENT] wrote logs\p5_fixed4.instrument.json (15 records)
+[AQCL-INSTRUMENT] wrote logs\p5_fixed4.instrument.json (15 records)

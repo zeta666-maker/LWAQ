@@ -1,0 +1,9 @@
+[tc] run F2024_fixed8_s2024
+[tc] F2024_fixed8_s2024: Last 80.87% Avg 90.98% Forg 16.93% size 88.89MB bits [8]
+
+## TC-MoA protocol summary
+
+| Case | seeds | Last-acc mean | min | max | Avg-acc mean | size MB | bits |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| fixed8 | 1 | 80.87% | 80.87% | 80.87% | 90.98% | 88.89 | [8] |
+  fixed8 C:\Users\Administrator\Desktop\CKAA_TIP2026-main\CKAA_TIP2026-main\logs\F2024_fixed8_s2024.txt: per-task [100.0, 99.84, 93.67, 80.54, 80.87]
