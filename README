@@ -1,0 +1,13 @@
+环境配置
+PyTorch
+pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+
+cd C:\Users\Administrator\Desktop\lwaq\CKAA_TIP2026-main
+pip install -r requirements.txt
+准备数据集
+cd C:\Users\Administrator\Desktop\lwaq\CKAA_TIP2026-main
+python tools/prepare_tabular_dataset.py --raw-root .. --output-root A_CLData/fault_csv --overwrite
+训练指令
+cd C:\Users\Administrator\Desktop\lwaq\CKAA_TIP2026-main
+
+python tools/run_aqcl_tcmoa_matrix.py --cases fp32,fixed8,fixed4 --seeds 2024,2025 --epochs 8
